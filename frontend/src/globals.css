@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #030712;
+  --surface: #0B1117;
+  --border: #1F2937;
+  --accent-primary: #38BDF8;
+  --accent-secondary: #818CF8;
+  --text-primary: #F3F4F6;
+  --text-secondary: #D1D5DB;
+}
+
+* {
+  @apply border-border;
+}
+
+html {
+  @apply scroll-smooth;
+}
+
+body {
+  @apply bg-background text-text-primary;
+  color-scheme: dark;
+}
+
+/* Real Rails Glassmorphism */
+.glass-card {
+  @apply bg-surface/40 backdrop-blur-md border border-border rounded-lg;
+}
+
+/* Cyan Glow on Active Elements */
+.glow-active {
+  @apply shadow-[0_0_8px_rgba(56,189,248,0.5)] transition-shadow duration-300;
+}
+
+.glow-active:hover {
+  @apply shadow-[0_0_12px_rgba(56,189,248,0.8)];
+}
+
+/* Typography System */
+.text-display {
+  @apply text-4xl font-bold tracking-tight;
+}
+
+.text-headline {
+  @apply text-2xl font-semibold tracking-tight;
+}
+
+.text-title {
+  @apply text-lg font-semibold;
+}
+
+.text-body {
+  @apply text-base font-normal;
+}
+
+.text-caption {
+  @apply text-sm text-text-secondary font-normal;
+}
