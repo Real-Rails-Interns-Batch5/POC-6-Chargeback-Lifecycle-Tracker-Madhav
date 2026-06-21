@@ -1,195 +1,235 @@
 # Chargeback Lifecycle Tracker
 
-A production-style Real Rails Intelligence Library dashboard for tracking and analyzing payment disputes and chargebacks in real-time.
+## Project Overview
 
-## 🎯 Project Overview
+Chargeback Lifecycle Tracker is a Real Rails Payments Intelligence dashboard designed to monitor and analyze payment disputes across their entire lifecycle. The application provides operational visibility into chargeback cases, dispute outcomes, merchant evidence submissions, and root-cause analysis through an interactive analytics dashboard.
 
-**Real Rails Protocol**: High-end Fintech Terminal / Real-Time Intelligence Dashboard  
-**Rail Category**: Payments  
-**Project ID**: 6 – Chargeback Lifecycle Tracker
+The project follows the Real Rails Intelligence Library protocol and implements a production-style dark intelligence interface with a strict 70/30 layout, interactive visualizations, contextual intelligence panels, and downloadable data exports.
 
-### Key Features
+---
 
-- **Case Timeline**: Visual representation of dispute lifecycle from opening to resolution
-- **Loss Allocation**: Merchant liability tracking and allocation analytics
-- **Merchant Evidence Checklist**: Document and evidence submission tracking
-- **Dispute Outcome Stats**: Real-time metrics on dispute resolutions
-- **Root-Cause Analysis**: Tagging and categorization of dispute origins
-- **Institutional Context**: "Why This Matters" and "Who Controls the Rail" panels
-- **Interactive Filters**: Real-time filtering by status, reason, and card network
-- **Sample Data Download**: Export dispute records for external analysis
+# Problem Statement
 
-## 🎨 Real Rails DNA Compliance
+Chargebacks are a major operational and financial challenge for merchants. Disputes can arise due to fraud, item-not-received claims, product quality issues, or transactions not matching customer expectations.
 
-### Visual Identity
-- **Theme**: High-end Fintech Terminal / Real-Time Intelligence Dashboard
-- **Background**: #030712 (Obsidian Black) — MANDATORY
-- **Surface/Cards**: #0B1117 (Deep Navy Grey)
-- **Accent Primary**: #38BDF8 (Electric Cyan)
-- **Accent Secondary**: #818CF8 (Indigo)
-- **Typography**: Inter / Geist Sans with tight letter-spacing
-- **Effects**: Subtle glassmorphism on cards; 0.5px cyan glow on active elements
+Managing and analyzing these disputes often requires reviewing information spread across multiple systems, making it difficult to identify trends, understand outcomes, and improve operational efficiency.
 
-### Layout Protocol
-- **Structure**: 2-Column Split (70% Main / 30% Sidebar)
-- **Main Stage**: Statistics visualization, case timeline, dispute data
-- **Intelligence Sidebar**:
-  - Title & High-level Metrics
-  - "Why This Matters" (Infrastructure context)
-  - "Who Controls the Rail" (Governance context)
-  - Functional Filters & Tooltips
-  - Download Sample Data button
+This project provides a centralized intelligence dashboard that enables users to:
 
-## 🏗️ Technology Stack
+* Track dispute cases from initiation to resolution
+* Analyze dispute outcomes and chargeback volumes
+* Monitor merchant evidence submissions
+* Identify recurring dispute root causes
+* Filter and investigate cases efficiently
+* Export dispute datasets for further analysis
 
-### Backend
-- **Framework**: FastAPI (Python)
-- **Data**: Pandas for data orchestration
-- **API**: RESTful JSON endpoints with CORS support
-- **Mock Data**: Synthetic order, fraud, and dispute case history
+---
 
-### Frontend
-- **Framework**: Next.js 14+ (App Router)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **Components**: shadcn/ui (customized with Real Rails colors)
-- **Visualization**: Recharts for analytics
-- **Tables**: TanStack Table for case management
-- **Icons**: Lucide React
+# Architecture Summary
 
-## 📋 Project Structure
+## Frontend
 
+**Technology Stack**
+
+* Next.js 14
+* TypeScript
+* Tailwind CSS
+* Recharts
+* TanStack Table
+* Lucide React
+
+**Key Features**
+
+* Statistics Dashboard
+* Interactive Charts
+* Chargeback Case Timeline
+* Merchant Evidence Tracking
+* Root Cause Analysis
+* Dynamic Filtering
+* Intelligence Sidebar
+* Sample Data Export
+
+---
+
+## Backend
+
+**Technology Stack**
+
+* FastAPI
+* Python
+* Pydantic
+* Pandas
+
+**API Endpoints**
+
+| Endpoint                   | Description               |
+| -------------------------- | ------------------------- |
+| `/api/cases`               | Retrieve chargeback cases |
+| `/api/cases/{id}`          | Retrieve specific case    |
+| `/api/cases/{id}/timeline` | Retrieve case timeline    |
+| `/api/stats`               | Dashboard statistics      |
+| `/api/dispute-outcomes`    | Dispute outcome metrics   |
+| `/api/sample-data`         | Download sample dataset   |
+
+---
+
+## Data Layer
+
+The application uses synthetic chargeback records representing:
+
+* Fraud disputes
+* Item-not-received disputes
+* Product quality disputes
+* Not-as-described disputes
+* Merchant evidence submissions
+* Chargeback lifecycle events
+* Root-cause classifications
+
+---
+
+# Setup Instructions
+
+## Prerequisites
+
+* Python 3.8+
+* Node.js 18+
+* npm
+
+---
+
+## Backend Setup
+
+```bash
+cd backend
+
+python -m venv venv
+
+# Windows
+venv\Scripts\activate
+
+# Linux/Mac
+source venv/bin/activate
+
+pip install -r requirements.txt
+
+python main.py
 ```
-.
-├── backend/                    # FastAPI application
-│   ├── main.py                # Core API server
-│   ├── requirements.txt        # Python dependencies
-│   └── .env                   # Environment configuration
-│
-├── frontend/                   # Next.js application
-│   ├── src/
-│   │   ├── app/               # App Router pages
-│   │   ├── components/        # React components
-│   │   ├── hooks/             # Custom React hooks
-│   │   ├── lib/               # Utilities & API client
-│   │   ├── types/             # TypeScript types
-│   │   └── globals.css        # Global styles
-│   ├── package.json           # Node.js dependencies
-│   ├── tsconfig.json          # TypeScript config
-│   ├── tailwind.config.js     # Tailwind configuration
-│   └── .env.local             # Environment variables
-│
-└── .gitignore                 # Git ignore rules
+
+Backend URL:
+
+```text
+http://localhost:8000
 ```
 
-## 🚀 Getting Started
+---
 
-### Prerequisites
-- Python 3.8+
-- Node.js 16+
-- npm or yarn
+## Frontend Setup
 
-### Backend Setup
-
-1. Navigate to the backend directory:
-   ```bash
-   cd backend
-   ```
-
-2. Create a virtual environment:
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
-
-3. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. Start the FastAPI server:
-   ```bash
-   python main.py
-   ```
-
-   The API will be available at `http://localhost:8000`
-
-### Frontend Setup
-
-1. Navigate to the frontend directory:
-   ```bash
-   cd frontend
-   ```
-
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-3. Start the development server:
-   ```bash
-   npm run dev
-   ```
-
-   The dashboard will be available at `http://localhost:3000`
-
-## 📡 API Endpoints
-
-### Cases
-- `GET /api/cases` — Retrieve all chargeback cases (with optional filters)
-- `GET /api/cases/{case_id}` — Get a specific case
-- `GET /api/cases/{case_id}/timeline` — Get case timeline events
-
-### Statistics
-- `GET /api/stats` — Overall chargeback statistics
-- `GET /api/dispute-outcomes` — Dispute outcome summary
-
-### Data Export
-- `GET /api/sample-data` — Download sample chargeback data as JSON
-
-## 🔒 Security & Configuration
-
-- **API Keys**: Stored in `.env` files (never hardcoded)
-- **CORS**: Configured for frontend origin
-- **Environment**: Separate configurations for development/production
-
-## ✅ Real Rails Verification Checklist
-
-- [x] Background color is #030712
-- [x] Sidebar occupies exactly 30% width
-- [x] Filters update data without full page refresh
-- [x] Terminology consistent with "Real Rails" (infrastructure focus)
-- [x] 2-column layout (70% main / 30% sidebar)
-- [x] Glassmorphism effects on cards
-- [x] Cyan glow on active elements
-- [x] Mock data fallback implemented
-- [x] All DNA constraints adhered to
-
-## 📊 Data Sources
-
-- **Primary**: Synthetic mock data for development/demo
-- **Sources**: CFPB, Federal Reserve Payments Study (when available)
-- **Format**: GeoJSON and structured JSON via FastAPI
-
-## 🔧 Development
-
-### Build Production Frontend
 ```bash
 cd frontend
-npm run build
-npm start
+
+npm install
+
+npm run dev
 ```
 
-### Type Checking
-```bash
-cd frontend
-npm run type-check
+Frontend URL:
+
+```text
+http://localhost:3000
 ```
 
-## 📝 License
+---
 
-This project is part of the Real Rails Intelligence Library and follows enterprise security standards.
+# Screenshots
 
-## 👥 Contributors
+Add screenshots before submission.
 
-Developed per the Real Rails Master Manifesto & Execution Protocol.
+## Dashboard Overview
+
+Insert screenshot showing:
+
+* Statistics cards
+* Analytics charts
+* Case timeline
+* Recent cases table
+
+## Intelligence Sidebar
+
+Insert screenshot showing:
+
+* Why This Matters panel
+* Who Controls The Rail panel
+* Data Provenance panel
+* Filters section
+
+## Case Investigation View
+
+Insert screenshot showing:
+
+* Timeline stages
+* Merchant evidence checklist
+* Root cause analysis tags
+
+## Data Export
+
+Insert screenshot showing sample JSON export download.
+
+---
+
+# AI Usage Summary
+
+AI-assisted development tools were used to support:
+
+* Component scaffolding
+* API structure planning
+* Documentation drafting
+* Code review assistance
+* UI refinement suggestions
+* Testing and validation support
+
+All generated outputs were reviewed, modified, integrated, and validated before inclusion in the final application.
+
+---
+
+# Future Enhancements
+
+## Real Data Integration
+
+* Live payment dispute feeds
+* Payment processor integrations
+* Chargeback provider APIs
+
+## Advanced Analytics
+
+* Dispute trend forecasting
+* Merchant risk scoring
+* Outcome prediction models
+
+## Workflow Management
+
+* Case ownership assignment
+* Automated notifications
+* Escalation workflows
+
+## Reporting
+
+* PDF exports
+* Scheduled reports
+* Executive summary dashboards
+
+## Security
+
+* User authentication
+* Role-based access control
+* Audit logging
+
+---
+
+# Project Status
+
+Phase 1 fully operational.
+
+The Chargeback Lifecycle Tracker successfully implements the Real Rails Payments rail using a production-style dispute intelligence dashboard. The platform includes chargeback lifecycle tracking, dispute outcome analytics, merchant evidence tracking, root cause analysis, case timeline visualization, payment network filtering, operational intelligence panels, KPI monitoring, dynamic filtering, and downloadable JSON exports.
+
+The dashboard follows the mandated Real Rails visual DNA with the #030712 Obsidian theme, enforced 70/30 intelligence layout, interactive analytics visualizations, and a fully populated intelligence sidebar. Backend APIs, synthetic chargeback data generation, timeline synchronization logic, filtering systems, data export functionality, and frontend visualization components are functioning correctly and integrated end-to-end.
