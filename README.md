@@ -157,14 +157,15 @@ uvicorn main:app --host 0.0.0.0 --port 8000
 
 ## Screenshots
 
+1. Dashboard Overview
 ![](images/1.png)
-
+2. Analytics & Industry Intelligence
 ![](images/2.png)
-
+3. Chargeback Lifecycle Timeline
 ![](images/3.png)
-
+4. Root Cause Analysis & Case Details
 ![](images/4.png)
-
+5. Case Management & Filters
 ![](images/5.png)
 
 ---
