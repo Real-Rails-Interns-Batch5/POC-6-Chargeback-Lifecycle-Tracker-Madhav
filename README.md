@@ -155,27 +155,6 @@ uvicorn main:app --host 0.0.0.0 --port 8000
 
 ---
 
-## Screenshots
-
-### Dashboard Overview
-
-![Dashboard Overview](c:\Users\madha\OneDrive\الصور\Screenshots\Screenshot 2026-06-21 144646.png)
-
-### Chargeback Case Timeline
-
-![Case Timeline](screenshots/case-timeline.png)
-
-### Dispute Analytics
-
-![Dispute Analytics](screenshots/dispute-analytics.png)
-
-### Intelligence Sidebar
-
-![Intelligence Sidebar](screenshots/intelligence-sidebar.png)
-
-> Replace the image paths above with the actual screenshot files stored in your repository.
-
----
 
 ## AI Usage Summary
 
