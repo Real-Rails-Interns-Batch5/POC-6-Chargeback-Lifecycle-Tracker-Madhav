@@ -1,9 +1,10 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Optional
-from datetime import datetime, timedelta
-import json
+from datetime import datetime
+from pathlib import Path
+import csv
 
 app = FastAPI(title="Chargeback Lifecycle Tracker API")
 
@@ -33,6 +34,8 @@ class ChargebackCase(BaseModel):
     root_cause_tags: List[str]
     merchant_win_rate: Optional[float] = None
     expected_resolution_date: Optional[str] = None
+    synthetic_record_label: str
+    edge_case_notes: Optional[str] = None
 
 
 class ChargebackStats(BaseModel):
@@ -46,10 +49,12 @@ class ChargebackStats(BaseModel):
 
 
 class TimelineEvent(BaseModel):
+    case_id: Optional[str] = None
     timestamp: str
     event_type: str  # opened, response_submitted, bank_review, resolved
     description: str
     actor: str  # merchant, customer, issuer, acquirer
+    synthetic_record_label: Optional[str] = None
 
 
 class DisputeOutcomeStats(BaseModel):
@@ -59,143 +64,86 @@ class DisputeOutcomeStats(BaseModel):
     settlement: int
 
 
-# ==================== MOCK DATA GENERATOR ====================
+# ==================== MOCK DATA PACKAGE LOADER ====================
 
-def generate_mock_cases() -> List[ChargebackCase]:
-    """Generate realistic synthetic chargeback case history"""
-    merchants = ["TechStore Inc", "Fashion Plus", "Electronics Hub", "Software Solutions Ltd", "Digital Services Co"]
-    reasons = ["fraud", "item_not_received", "quality_issue", "not_as_described"]
-    networks = ["visa", "mastercard", "amex", "discover"]
-    statuses = ["opened", "under_review", "merchant_response", "resolved"]
-    evidence_types = ["invoice", "tracking_number", "customer_email", "delivery_signature", "product_photos", "refund_offer"]
-    root_causes = ["shipping_delay", "packaging_damage", "authorization_issue", "duplicate_charge", "customer_regret", "processing_error"]
-    
-    base_date = datetime.now() - timedelta(days=180)
+MOCK_DATA_DIR = Path(__file__).resolve().parent / "mock_data"
+CASES_CSV_PATH = MOCK_DATA_DIR / "chargeback_cases.csv"
+TIMELINE_EVENTS_CSV_PATH = MOCK_DATA_DIR / "timeline_events.csv"
+
+
+def _parse_list(value: str) -> List[str]:
+    if not value:
+        return []
+
+    return [
+        item.strip()
+        for item in value.split(";")
+        if item.strip()
+    ]
+
+
+def _parse_optional_float(value: str) -> Optional[float]:
+    if value == "":
+        return None
+
+    return float(value)
+
+
+def load_mock_cases() -> List[ChargebackCase]:
+    """Load synthetic chargeback cases from the mock-data CSV package."""
     cases = []
-    
-    for i in range(25):
-        days_offset = i * 7
-        dispute_date = (base_date + timedelta(days=days_offset)).isoformat()
-        
-        case = ChargebackCase(
-            id=f"CB-2024-{1000 + i}",
-            order_id=f"ORD-{100000 + i}",
-            merchant_name=merchants[i % len(merchants)],
-            amount=round(50 + (i * 37.5) % 950, 2),
-            currency="USD",
-            dispute_date=dispute_date,
-            case_status=statuses[i % len(statuses)],
-            dispute_reason=reasons[i % len(reasons)],
-            card_network=networks[i % len(networks)],
-            loss_allocation=round(20 + (i * 3.5) % 75, 1),
-            merchant_response_evidence=[evidence_types[i % len(evidence_types)]] if i % 2 == 0 else [],
-            root_cause_tags=[root_causes[i % len(root_causes)], root_causes[(i+1) % len(root_causes)]],
-            merchant_win_rate=round((i % 3) * 33.3, 1) if statuses[i % len(statuses)] == "resolved" else None,
-            expected_resolution_date=(base_date + timedelta(days=days_offset + 45)).isoformat() if statuses[i % len(statuses)] != "resolved" else None,
-        )
-        cases.append(case)
-    
+
+    with CASES_CSV_PATH.open(newline="", encoding="utf-8") as csv_file:
+        reader = csv.DictReader(csv_file)
+
+        for row in reader:
+            cases.append(
+                ChargebackCase(
+                    id=row["id"],
+                    order_id=row["order_id"],
+                    merchant_name=row["merchant_name"],
+                    amount=float(row["amount"]),
+                    currency=row["currency"],
+                    dispute_date=row["dispute_date"],
+                    case_status=row["case_status"],
+                    dispute_reason=row["dispute_reason"],
+                    card_network=row["card_network"],
+                    loss_allocation=float(row["loss_allocation"]),
+                    merchant_response_evidence=_parse_list(row["merchant_response_evidence"]),
+                    root_cause_tags=_parse_list(row["root_cause_tags"]),
+                    merchant_win_rate=_parse_optional_float(row["merchant_win_rate"]),
+                    expected_resolution_date=row["expected_resolution_date"] or None,
+                    synthetic_record_label=row["synthetic_record_label"],
+                    edge_case_notes=row["edge_case_notes"] or None,
+                )
+            )
+
     return cases
 
 
-def generate_mock_timeline(case_id: str) -> List[TimelineEvent]:
-    """Generate different timelines based on case id"""
+def load_mock_timeline_events(case_id: str) -> List[TimelineEvent]:
+    """Load synthetic timeline events for a chargeback case from CSV."""
+    events = []
 
-    case_num = int(case_id.split("-")[-1])
+    with TIMELINE_EVENTS_CSV_PATH.open(newline="", encoding="utf-8") as csv_file:
+        reader = csv.DictReader(csv_file)
 
-    base_date = datetime.now() - timedelta(
-        days=(case_num % 20) + 10
-    )
+        for row in reader:
+            if row["case_id"] != case_id:
+                continue
 
-    pattern = case_num % 4
+            events.append(
+                TimelineEvent(
+                    case_id=row["case_id"],
+                    timestamp=row["timestamp"],
+                    event_type=row["event_type"],
+                    description=row["description"],
+                    actor=row["actor"],
+                    synthetic_record_label=row["synthetic_record_label"],
+                )
+            )
 
-    if pattern == 0:
-        return [
-            TimelineEvent(
-                timestamp=base_date.isoformat(),
-                event_type="opened",
-                description="Customer initiated dispute",
-                actor="customer",
-            ),
-            TimelineEvent(
-                timestamp=(base_date + timedelta(days=2)).isoformat(),
-                event_type="bank_review",
-                description="Issuing bank started investigation",
-                actor="issuer",
-            ),
-            TimelineEvent(
-                timestamp=(base_date + timedelta(days=5)).isoformat(),
-                event_type="response_submitted",
-                description="Merchant submitted evidence",
-                actor="merchant",
-            ),
-            TimelineEvent(
-                timestamp=(base_date + timedelta(days=11)).isoformat(),
-                event_type="resolved",
-                description="Case resolved in favor of merchant",
-                actor="issuer",
-            ),
-        ]
-
-    elif pattern == 1:
-        return [
-            TimelineEvent(
-                timestamp=base_date.isoformat(),
-                event_type="opened",
-                description="Dispute opened",
-                actor="customer",
-            ),
-            TimelineEvent(
-                timestamp=(base_date + timedelta(days=4)).isoformat(),
-                event_type="bank_review",
-                description="Investigation ongoing",
-                actor="issuer",
-            ),
-        ]
-
-    elif pattern == 2:
-        return [
-            TimelineEvent(
-                timestamp=base_date.isoformat(),
-                event_type="opened",
-                description="Chargeback initiated",
-                actor="customer",
-            ),
-            TimelineEvent(
-                timestamp=(base_date + timedelta(days=3)).isoformat(),
-                event_type="bank_review",
-                description="Evidence requested",
-                actor="issuer",
-            ),
-            TimelineEvent(
-                timestamp=(base_date + timedelta(days=8)).isoformat(),
-                event_type="response_submitted",
-                description="Merchant submitted supporting documents",
-                actor="merchant",
-            ),
-        ]
-
-    else:
-        return [
-            TimelineEvent(
-                timestamp=base_date.isoformat(),
-                event_type="opened",
-                description="Fraud dispute initiated",
-                actor="customer",
-            ),
-            TimelineEvent(
-                timestamp=(base_date + timedelta(days=5)).isoformat(),
-                event_type="bank_review",
-                description="Issuer investigation completed",
-                actor="issuer",
-            ),
-            TimelineEvent(
-                timestamp=(base_date + timedelta(days=9)).isoformat(),
-                event_type="resolved",
-                description="Resolved in favor of customer",
-                actor="issuer",
-            ),
-        ]
+    return events
 
 
 # ==================== API ENDPOINTS ====================
@@ -226,7 +174,7 @@ async def get_cases(
     - merchant: Filter by merchant name (partial match)
     - limit: Maximum number of cases to return
     """
-    cases = generate_mock_cases()
+    cases = load_mock_cases()
     
     if status:
         cases = [c for c in cases if c.case_status == status]
@@ -242,76 +190,14 @@ async def get_cases(
     
     return cases[:limit]
 
-def generate_timeline_for_status(
-    case_status: str
-) -> List[TimelineEvent]:
-
-    base_date = datetime.now() - timedelta(days=14)
-
-    opened_event = TimelineEvent(
-        timestamp=base_date.isoformat(),
-        event_type="opened",
-        description="Customer initiated dispute",
-        actor="customer",
-    )
-
-    review_event = TimelineEvent(
-        timestamp=(base_date + timedelta(days=2)).isoformat(),
-        event_type="bank_review",
-        description="Issuing bank started investigation",
-        actor="issuer",
-    )
-
-    response_event = TimelineEvent(
-        timestamp=(base_date + timedelta(days=5)).isoformat(),
-        event_type="response_submitted",
-        description="Merchant submitted evidence",
-        actor="merchant",
-    )
-
-    resolved_event = TimelineEvent(
-        timestamp=(base_date + timedelta(days=10)).isoformat(),
-        event_type="resolved",
-        description="Case resolved",
-        actor="issuer",
-    )
-
-    if case_status == "opened":
-        return [
-            opened_event
-        ]
-
-    if case_status == "under_review":
-        return [
-            opened_event,
-            review_event,
-        ]
-
-    if case_status == "merchant_response":
-        return [
-            opened_event,
-            review_event,
-            response_event,
-        ]
-
-    if case_status == "resolved":
-        return [
-            opened_event,
-            review_event,
-            response_event,
-            resolved_event,
-        ]
-
-    return [opened_event]
-
 @app.get("/api/cases/{case_id}", response_model=ChargebackCase)
 async def get_case(case_id: str):
     """Retrieve a specific chargeback case by ID"""
-    cases = generate_mock_cases()
+    cases = load_mock_cases()
     case = next((c for c in cases if c.id == case_id), None)
     
     if not case:
-        return {"error": "Case not found"}, 404
+        raise HTTPException(status_code=404, detail="Case not found")
     
     return case
 
@@ -320,7 +206,7 @@ async def get_case(case_id: str):
 async def get_case_timeline(case_id: str):
     """Retrieve timeline matching actual case status"""
 
-    cases = generate_mock_cases()
+    cases = load_mock_cases()
 
     case = next(
         (c for c in cases if c.id == case_id),
@@ -330,19 +216,17 @@ async def get_case_timeline(case_id: str):
     if not case:
         return []
 
-    return generate_timeline_for_status(
-        case.case_status
-    )
+    return load_mock_timeline_events(case_id)
 
 
 @app.get("/api/stats", response_model=ChargebackStats)
 async def get_stats():
     """Retrieve overall chargeback statistics"""
-    cases = generate_mock_cases()
+    cases = load_mock_cases()
     
     open_cases = len([c for c in cases if c.case_status in ["opened", "under_review"]])
     resolved_cases = len([c for c in cases if c.case_status == "resolved"])
-    merchant_wins = len([c for c in cases if c.case_status == "resolved" and c.merchant_win_rate and c.merchant_win_rate > 50])
+    merchant_wins = len([c for c in cases if c.case_status == "resolved" and c.merchant_win_rate is not None and c.merchant_win_rate > 50])
     merchant_losses = resolved_cases - merchant_wins
     
     avg_amount = sum(c.amount for c in cases) / len(cases) if cases else 0
@@ -362,10 +246,10 @@ async def get_stats():
 @app.get("/api/dispute-outcomes", response_model=DisputeOutcomeStats)
 async def get_dispute_outcomes():
     """Retrieve dispute outcome statistics"""
-    cases = generate_mock_cases()
+    cases = load_mock_cases()
     
-    favorable_merchant = len([c for c in cases if c.case_status == "resolved" and c.merchant_win_rate and c.merchant_win_rate > 50])
-    favorable_customer = len([c for c in cases if c.case_status == "resolved" and c.merchant_win_rate and c.merchant_win_rate <= 50])
+    favorable_merchant = len([c for c in cases if c.case_status == "resolved" and c.merchant_win_rate is not None and c.merchant_win_rate > 50])
+    favorable_customer = len([c for c in cases if c.case_status == "resolved" and c.merchant_win_rate is not None and c.merchant_win_rate <= 50])
     pending = len([c for c in cases if c.case_status in ["opened", "under_review"]])
     settlement = len([c for c in cases if c.case_status == "merchant_response"])
     
@@ -380,7 +264,7 @@ async def get_dispute_outcomes():
 @app.get("/api/sample-data")
 async def download_sample_data():
     """Provide downloadable sample chargeback data"""
-    cases = generate_mock_cases()
+    cases = load_mock_cases()
     
     data = {
         "export_date": datetime.now().isoformat(),
@@ -397,7 +281,12 @@ async def download_sample_data():
                 "dispute_reason": c.dispute_reason,
                 "card_network": c.card_network,
                 "loss_allocation": c.loss_allocation,
+                "merchant_response_evidence": c.merchant_response_evidence,
                 "root_cause_tags": c.root_cause_tags,
+                "merchant_win_rate": c.merchant_win_rate,
+                "expected_resolution_date": c.expected_resolution_date,
+                "synthetic_record_label": c.synthetic_record_label,
+                "edge_case_notes": c.edge_case_notes,
             }
             for c in cases
         ]

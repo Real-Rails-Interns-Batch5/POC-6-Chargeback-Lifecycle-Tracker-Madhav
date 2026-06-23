@@ -1,0 +1,183 @@
+{
+  "title": "Chargeback Lifecycle Tracker",
+  "synthetic_data_notice": "All entities and records in this package are synthetic mock data for the Chargeback Lifecycle Tracker PoC.",
+  "entities": [
+    {
+      "name": "ChargebackCase",
+      "description": "Synthetic payment dispute case used for chargeback lifecycle analytics.",
+      "source_files": [
+        "chargeback_cases.csv",
+        "chargeback_cases.json"
+      ],
+      "fields": [
+        {
+          "name": "id",
+          "type": "string",
+          "definition": "Synthetic unique chargeback case identifier.",
+          "example": "CB-2026-1001"
+        },
+        {
+          "name": "order_id",
+          "type": "string",
+          "definition": "Synthetic order identifier associated with the dispute.",
+          "example": "ORD-901001"
+        },
+        {
+          "name": "merchant_name",
+          "type": "string",
+          "definition": "Synthetic merchant display name.",
+          "example": "TechStore Inc"
+        },
+        {
+          "name": "amount",
+          "type": "number",
+          "definition": "Disputed transaction amount in the provided currency.",
+          "example": 349.99
+        },
+        {
+          "name": "currency",
+          "type": "string",
+          "definition": "ISO-style transaction currency code.",
+          "allowed_values": [
+            "USD"
+          ]
+        },
+        {
+          "name": "dispute_date",
+          "type": "datetime",
+          "definition": "Synthetic ISO 8601 timestamp when the dispute was opened."
+        },
+        {
+          "name": "case_status",
+          "type": "string",
+          "definition": "Current lifecycle state of the synthetic case.",
+          "allowed_values": [
+            "opened",
+            "under_review",
+            "merchant_response",
+            "resolved"
+          ]
+        },
+        {
+          "name": "dispute_reason",
+          "type": "string",
+          "definition": "Primary network-style reason category for the synthetic dispute.",
+          "allowed_values": [
+            "fraud",
+            "item_not_received",
+            "quality_issue",
+            "not_as_described"
+          ]
+        },
+        {
+          "name": "card_network",
+          "type": "string",
+          "definition": "Synthetic payment network.",
+          "allowed_values": [
+            "visa",
+            "mastercard",
+            "amex",
+            "discover"
+          ]
+        },
+        {
+          "name": "loss_allocation",
+          "type": "number",
+          "definition": "Percentage of disputed amount allocated to merchant liability."
+        },
+        {
+          "name": "merchant_response_evidence",
+          "type": "array<string>",
+          "definition": "Evidence artifacts submitted by the merchant. Empty arrays indicate no evidence submitted."
+        },
+        {
+          "name": "root_cause_tags",
+          "type": "array<string>",
+          "definition": "Synthetic operational tags explaining likely dispute drivers."
+        },
+        {
+          "name": "merchant_win_rate",
+          "type": "number|null",
+          "definition": "Synthetic case-level outcome confidence or win indicator for resolved disputes."
+        },
+        {
+          "name": "expected_resolution_date",
+          "type": "datetime|null",
+          "definition": "Synthetic expected resolution timestamp for unresolved disputes."
+        },
+        {
+          "name": "synthetic_record_label",
+          "type": "string",
+          "definition": "Required label making clear that every row is synthetic."
+        },
+        {
+          "name": "edge_case_notes",
+          "type": "string|null",
+          "definition": "Notes for unusual or error-state coverage represented by the record."
+        }
+      ]
+    },
+    {
+      "name": "TimelineEvent",
+      "description": "Synthetic lifecycle event derived by the API from a chargeback case status.",
+      "source_files": [
+        "timeline_events.csv",
+        "timeline_events.json"
+      ],
+      "fields": [
+        {
+          "name": "case_id",
+          "type": "string",
+          "definition": "Synthetic chargeback case identifier that owns the timeline event."
+        },
+        {
+          "name": "timestamp",
+          "type": "datetime",
+          "definition": "Synthetic ISO 8601 timestamp for the event."
+        },
+        {
+          "name": "event_type",
+          "type": "string",
+          "definition": "Lifecycle event category.",
+          "allowed_values": [
+            "opened",
+            "bank_review",
+            "response_submitted",
+            "resolved"
+          ]
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "definition": "Synthetic event description."
+        },
+        {
+          "name": "actor",
+          "type": "string",
+          "definition": "Synthetic party responsible for the event.",
+          "allowed_values": [
+            "merchant",
+            "customer",
+            "issuer",
+            "acquirer"
+          ]
+        },
+        {
+          "name": "synthetic_record_label",
+          "type": "string",
+          "definition": "Required label making clear that every timeline row is synthetic."
+        }
+      ]
+    }
+  ],
+  "edge_cases": [
+    "High-value fraud dispute",
+    "No merchant evidence submitted",
+    "Duplicate charge investigation",
+    "Zero merchant liability",
+    "Full merchant liability",
+    "Pending case past expected resolution",
+    "Low-value quality dispute",
+    "Settlement or merchant-response state"
+  ]
+}

@@ -1,0 +1,366 @@
+﻿{
+    "title":  "Chargeback Lifecycle Tracker",
+    "synthetic_data_notice":  "All timeline records are synthetic mock data and are not production, customer, merchant, or processor data.",
+    "records":  [
+                    {
+                        "case_id":  "CB-2026-1001",
+                        "timestamp":  "2026-01-08T10:15:00",
+                        "event_type":  "opened",
+                        "description":  "Customer initiated fraud dispute",
+                        "actor":  "customer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1002",
+                        "timestamp":  "2026-01-12T14:20:00",
+                        "event_type":  "opened",
+                        "description":  "Customer reported item not received",
+                        "actor":  "customer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1002",
+                        "timestamp":  "2026-01-14T14:20:00",
+                        "event_type":  "bank_review",
+                        "description":  "Issuer started carrier evidence review",
+                        "actor":  "issuer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1003",
+                        "timestamp":  "2026-01-18T09:05:00",
+                        "event_type":  "opened",
+                        "description":  "Customer disputed item description",
+                        "actor":  "customer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1003",
+                        "timestamp":  "2026-01-20T09:05:00",
+                        "event_type":  "bank_review",
+                        "description":  "Issuer requested product evidence",
+                        "actor":  "issuer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1003",
+                        "timestamp":  "2026-01-23T09:05:00",
+                        "event_type":  "response_submitted",
+                        "description":  "Merchant submitted invoice photos and customer messages",
+                        "actor":  "merchant",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1004",
+                        "timestamp":  "2026-01-25T16:40:00",
+                        "event_type":  "opened",
+                        "description":  "Customer reported quality issue",
+                        "actor":  "customer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1004",
+                        "timestamp":  "2026-01-27T16:40:00",
+                        "event_type":  "bank_review",
+                        "description":  "Issuer reviewed service activation records",
+                        "actor":  "issuer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1004",
+                        "timestamp":  "2026-01-30T16:40:00",
+                        "event_type":  "response_submitted",
+                        "description":  "Merchant submitted usage logs and support messages",
+                        "actor":  "merchant",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1004",
+                        "timestamp":  "2026-02-04T16:40:00",
+                        "event_type":  "resolved",
+                        "description":  "Case resolved in favor of merchant",
+                        "actor":  "issuer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1005",
+                        "timestamp":  "2026-02-01T11:10:00",
+                        "event_type":  "opened",
+                        "description":  "Customer initiated fraud dispute",
+                        "actor":  "customer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1005",
+                        "timestamp":  "2026-02-03T11:10:00",
+                        "event_type":  "bank_review",
+                        "description":  "Issuer found missing verification evidence",
+                        "actor":  "issuer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1005",
+                        "timestamp":  "2026-02-06T11:10:00",
+                        "event_type":  "response_submitted",
+                        "description":  "Merchant did not provide supporting evidence",
+                        "actor":  "merchant",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1005",
+                        "timestamp":  "2026-02-10T11:10:00",
+                        "event_type":  "resolved",
+                        "description":  "Case resolved in favor of customer",
+                        "actor":  "issuer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1006",
+                        "timestamp":  "2026-02-09T13:25:00",
+                        "event_type":  "opened",
+                        "description":  "Customer denied receiving delivery",
+                        "actor":  "customer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1006",
+                        "timestamp":  "2026-02-11T13:25:00",
+                        "event_type":  "bank_review",
+                        "description":  "Issuer requested delivery confirmation",
+                        "actor":  "issuer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1006",
+                        "timestamp":  "2026-02-14T13:25:00",
+                        "event_type":  "response_submitted",
+                        "description":  "Merchant submitted tracking and signature evidence",
+                        "actor":  "merchant",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1007",
+                        "timestamp":  "2026-02-18T08:55:00",
+                        "event_type":  "opened",
+                        "description":  "Customer disputed travel description",
+                        "actor":  "customer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1007",
+                        "timestamp":  "2026-02-21T08:55:00",
+                        "event_type":  "bank_review",
+                        "description":  "Issuer reviewing cancellation and refund terms",
+                        "actor":  "issuer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1008",
+                        "timestamp":  "2026-02-27T15:05:00",
+                        "event_type":  "opened",
+                        "description":  "Customer reported item not received",
+                        "actor":  "customer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1008",
+                        "timestamp":  "2026-03-01T15:05:00",
+                        "event_type":  "bank_review",
+                        "description":  "Issuer reviewed late carrier scan",
+                        "actor":  "issuer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1008",
+                        "timestamp":  "2026-03-04T15:05:00",
+                        "event_type":  "response_submitted",
+                        "description":  "Merchant submitted tracking record",
+                        "actor":  "merchant",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1008",
+                        "timestamp":  "2026-03-09T15:05:00",
+                        "event_type":  "resolved",
+                        "description":  "Case resolved in favor of customer",
+                        "actor":  "issuer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1009",
+                        "timestamp":  "2026-03-05T12:45:00",
+                        "event_type":  "opened",
+                        "description":  "High-value fraud dispute opened",
+                        "actor":  "customer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1010",
+                        "timestamp":  "2026-03-12T17:30:00",
+                        "event_type":  "opened",
+                        "description":  "Customer opened low-value quality dispute",
+                        "actor":  "customer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1010",
+                        "timestamp":  "2026-03-14T17:30:00",
+                        "event_type":  "bank_review",
+                        "description":  "Issuer reviewed refund offer",
+                        "actor":  "issuer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1010",
+                        "timestamp":  "2026-03-17T17:30:00",
+                        "event_type":  "response_submitted",
+                        "description":  "Merchant submitted customer email and refund offer",
+                        "actor":  "merchant",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1010",
+                        "timestamp":  "2026-03-21T17:30:00",
+                        "event_type":  "resolved",
+                        "description":  "Case resolved mostly in favor of merchant",
+                        "actor":  "issuer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1011",
+                        "timestamp":  "2026-03-21T10:00:00",
+                        "event_type":  "opened",
+                        "description":  "Fraud dispute opened after billing mismatch",
+                        "actor":  "customer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1011",
+                        "timestamp":  "2026-03-24T10:00:00",
+                        "event_type":  "bank_review",
+                        "description":  "Issuer escalated for manual review",
+                        "actor":  "issuer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1012",
+                        "timestamp":  "2026-04-02T09:35:00",
+                        "event_type":  "opened",
+                        "description":  "Customer disputed service quality",
+                        "actor":  "customer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1012",
+                        "timestamp":  "2026-04-04T09:35:00",
+                        "event_type":  "bank_review",
+                        "description":  "Issuer requested outage and SLA records",
+                        "actor":  "issuer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1012",
+                        "timestamp":  "2026-04-07T09:35:00",
+                        "event_type":  "response_submitted",
+                        "description":  "Merchant submitted usage logs support ticket and refund offer",
+                        "actor":  "merchant",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1013",
+                        "timestamp":  "2026-04-11T19:15:00",
+                        "event_type":  "opened",
+                        "description":  "Customer disputed subscription terms",
+                        "actor":  "customer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1013",
+                        "timestamp":  "2026-04-13T19:15:00",
+                        "event_type":  "bank_review",
+                        "description":  "Issuer reviewed cancellation trail",
+                        "actor":  "issuer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1013",
+                        "timestamp":  "2026-04-16T19:15:00",
+                        "event_type":  "response_submitted",
+                        "description":  "Merchant submitted customer email history",
+                        "actor":  "merchant",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1013",
+                        "timestamp":  "2026-04-21T19:15:00",
+                        "event_type":  "resolved",
+                        "description":  "Case resolved in favor of customer",
+                        "actor":  "issuer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1014",
+                        "timestamp":  "2026-04-20T07:50:00",
+                        "event_type":  "opened",
+                        "description":  "Customer reported missing delivery after address change",
+                        "actor":  "customer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1015",
+                        "timestamp":  "2026-05-03T18:05:00",
+                        "event_type":  "opened",
+                        "description":  "Customer reported possible duplicate charge",
+                        "actor":  "customer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1015",
+                        "timestamp":  "2026-05-05T18:05:00",
+                        "event_type":  "bank_review",
+                        "description":  "Issuer requested processor retry evidence",
+                        "actor":  "issuer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1015",
+                        "timestamp":  "2026-05-08T18:05:00",
+                        "event_type":  "response_submitted",
+                        "description":  "Merchant submitted invoice messages and delivery signature",
+                        "actor":  "merchant",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1016",
+                        "timestamp":  "2026-05-19T21:30:00",
+                        "event_type":  "opened",
+                        "description":  "Customer disputed travel booking description",
+                        "actor":  "customer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1016",
+                        "timestamp":  "2026-05-21T21:30:00",
+                        "event_type":  "bank_review",
+                        "description":  "Issuer reviewed documented booking terms",
+                        "actor":  "issuer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1016",
+                        "timestamp":  "2026-05-24T21:30:00",
+                        "event_type":  "response_submitted",
+                        "description":  "Merchant submitted invoice messages and refund offer",
+                        "actor":  "merchant",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1016",
+                        "timestamp":  "2026-05-29T21:30:00",
+                        "event_type":  "resolved",
+                        "description":  "Case resolved mostly in favor of merchant",
+                        "actor":  "issuer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    }
+                ]
+}

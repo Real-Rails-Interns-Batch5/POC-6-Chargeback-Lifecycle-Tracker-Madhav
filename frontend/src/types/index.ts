@@ -13,13 +13,17 @@ export interface ChargebackCase {
   root_cause_tags: string[];
   merchant_win_rate?: number;
   expected_resolution_date?: string;
+  synthetic_record_label: string;
+  edge_case_notes?: string;
 }
 
 export interface TimelineEvent {
+  case_id?: string;
   timestamp: string;
   event_type: 'opened' | 'response_submitted' | 'bank_review' | 'resolved';
   description: string;
   actor: 'merchant' | 'customer' | 'issuer' | 'acquirer';
+  synthetic_record_label?: string;
 }
 
 export interface ChargebackStats {
