@@ -43,6 +43,12 @@ The content is organized as follows:
 .gitattributes
 .gitignore
 backend/main.py
+backend/mock_data/chargeback_cases.csv
+backend/mock_data/chargeback_cases.json
+backend/mock_data/data_dictionary.json
+backend/mock_data/README.md
+backend/mock_data/timeline_events.csv
+backend/mock_data/timeline_events.json
 backend/requirements.txt
 frontend/next-env.d.ts
 frontend/next.config.js
@@ -92,6 +98,952 @@ node_modules/
 dist/
 build/
 *.log
+</file>
+
+<file path="backend/mock_data/chargeback_cases.csv">
+id,order_id,merchant_name,amount,currency,dispute_date,case_status,dispute_reason,card_network,loss_allocation,merchant_response_evidence,root_cause_tags,merchant_win_rate,expected_resolution_date,synthetic_record_label,edge_case_notes
+CB-2026-1001,ORD-901001,TechStore Inc,349.99,USD,2026-01-08T10:15:00,opened,fraud,visa,35.0,,authorization_issue;account_takeover,,2026-02-22T10:15:00,SYNTHETIC - Chargeback Lifecycle Tracker mock data,New fraud claim without evidence yet
+CB-2026-1002,ORD-901002,Fashion Plus,89.50,USD,2026-01-12T14:20:00,under_review,item_not_received,mastercard,55.0,tracking_number;customer_email,shipping_delay;carrier_scan_gap,,2026-02-26T14:20:00,SYNTHETIC - Chargeback Lifecycle Tracker mock data,Carrier tracking has conflicting status
+CB-2026-1003,ORD-901003,Electronics Hub,1299.00,USD,2026-01-18T09:05:00,merchant_response,not_as_described,amex,42.5,invoice;product_photos;customer_email,product_expectation_gap;return_policy_confusion,,2026-03-04T09:05:00,SYNTHETIC - Chargeback Lifecycle Tracker mock data,High-value item dispute requiring multiple evidence types
+CB-2026-1004,ORD-901004,Software Solutions Ltd,499.00,USD,2026-01-25T16:40:00,resolved,quality_issue,discover,0.0,invoice;usage_logs;customer_email,service_activation_delay;support_response_gap,91.0,,SYNTHETIC - Chargeback Lifecycle Tracker mock data,Resolved merchant win with zero merchant liability
+CB-2026-1005,ORD-901005,Digital Services Co,19.99,USD,2026-02-01T11:10:00,resolved,fraud,visa,100.0,,authorization_issue;missing_cvv_match,0.0,,SYNTHETIC - Chargeback Lifecycle Tracker mock data,Full merchant liability and no evidence submitted
+CB-2026-1006,ORD-901006,Home Goods Outlet,245.75,USD,2026-02-09T13:25:00,merchant_response,item_not_received,mastercard,62.0,tracking_number;delivery_signature,porch_delivery_claim;shipping_delay,,2026-03-26T13:25:00,SYNTHETIC - Chargeback Lifecycle Tracker mock data,Delivery signature exists but customer denies receipt
+CB-2026-1007,ORD-901007,Travel Desk Online,875.20,USD,2026-02-18T08:55:00,under_review,not_as_described,amex,48.0,customer_email;refund_offer,cancellation_policy_confusion;partial_refund_offer,,2026-04-04T08:55:00,SYNTHETIC - Chargeback Lifecycle Tracker mock data,Partial refund offered while issuer review remains open
+CB-2026-1008,ORD-901008,QuickShip Market,64.35,USD,2026-02-27T15:05:00,resolved,item_not_received,discover,78.0,tracking_number,late_delivery;customer_regret,20.0,,SYNTHETIC - Chargeback Lifecycle Tracker mock data,Resolved customer win after late delivery
+CB-2026-1009,ORD-901009,TechStore Inc,2149.99,USD,2026-03-05T12:45:00,opened,fraud,visa,70.0,,high_value_order;velocity_check_missed,,2026-04-19T12:45:00,SYNTHETIC - Chargeback Lifecycle Tracker mock data,High-value fraud edge case
+CB-2026-1010,ORD-901010,Fashion Plus,7.49,USD,2026-03-12T17:30:00,resolved,quality_issue,mastercard,25.0,refund_offer;customer_email,low_value_dispute;customer_regret,66.7,,SYNTHETIC - Chargeback Lifecycle Tracker mock data,Low-value quality dispute with merchant-favorable outcome
+CB-2026-1011,ORD-901011,Electronics Hub,699.00,USD,2026-03-21T10:00:00,under_review,fraud,amex,58.5,invoice,manual_review_required;billing_address_mismatch,,2026-05-05T10:00:00,SYNTHETIC - Chargeback Lifecycle Tracker mock data,Issuer review delayed by billing mismatch
+CB-2026-1012,ORD-901012,Software Solutions Ltd,120.00,USD,2026-04-02T09:35:00,merchant_response,quality_issue,discover,40.0,usage_logs;support_ticket;refund_offer,service_outage;sla_credit_pending,,2026-05-17T09:35:00,SYNTHETIC - Chargeback Lifecycle Tracker mock data,Service outage with pending SLA credit
+CB-2026-1013,ORD-901013,Digital Services Co,59.99,USD,2026-04-11T19:15:00,resolved,not_as_described,visa,85.0,customer_email,subscription_terms_confusion;failed_cancellation,33.3,,SYNTHETIC - Chargeback Lifecycle Tracker mock data,Resolved customer-favorable subscription terms dispute
+CB-2026-1014,ORD-901014,Home Goods Outlet,340.40,USD,2026-04-20T07:50:00,opened,item_not_received,mastercard,52.0,,address_change_after_order;carrier_scan_gap,,2026-05-20T07:50:00,SYNTHETIC - Chargeback Lifecycle Tracker mock data,Pending case past expected resolution date
+CB-2026-1015,ORD-901015,QuickShip Market,180.80,USD,2026-05-03T18:05:00,merchant_response,fraud,discover,60.0,invoice;customer_email;delivery_signature,duplicate_charge;processor_retry,,2026-06-17T18:05:00,SYNTHETIC - Chargeback Lifecycle Tracker mock data,Duplicate charge investigation in merchant response state
+CB-2026-1016,ORD-901016,Travel Desk Online,1520.00,USD,2026-05-19T21:30:00,resolved,not_as_described,amex,12.0,invoice;customer_email;refund_offer,cancellation_policy_confusion;documented_terms,88.5,,SYNTHETIC - Chargeback Lifecycle Tracker mock data,High-value travel dispute resolved mostly in merchant favor
+</file>
+
+<file path="backend/mock_data/chargeback_cases.json">
+{
+  "title": "Chargeback Lifecycle Tracker",
+  "synthetic_data_notice": "All records are synthetic mock data and are not production, customer, merchant, or processor data.",
+  "records": [
+    {
+      "id": "CB-2026-1001",
+      "order_id": "ORD-901001",
+      "merchant_name": "TechStore Inc",
+      "amount": 349.99,
+      "currency": "USD",
+      "dispute_date": "2026-01-08T10:15:00",
+      "case_status": "opened",
+      "dispute_reason": "fraud",
+      "card_network": "visa",
+      "loss_allocation": 35.0,
+      "merchant_response_evidence": [],
+      "root_cause_tags": ["authorization_issue", "account_takeover"],
+      "merchant_win_rate": null,
+      "expected_resolution_date": "2026-02-22T10:15:00",
+      "synthetic_record_label": "SYNTHETIC - Chargeback Lifecycle Tracker mock data",
+      "edge_case_notes": "New fraud claim without evidence yet"
+    },
+    {
+      "id": "CB-2026-1002",
+      "order_id": "ORD-901002",
+      "merchant_name": "Fashion Plus",
+      "amount": 89.5,
+      "currency": "USD",
+      "dispute_date": "2026-01-12T14:20:00",
+      "case_status": "under_review",
+      "dispute_reason": "item_not_received",
+      "card_network": "mastercard",
+      "loss_allocation": 55.0,
+      "merchant_response_evidence": ["tracking_number", "customer_email"],
+      "root_cause_tags": ["shipping_delay", "carrier_scan_gap"],
+      "merchant_win_rate": null,
+      "expected_resolution_date": "2026-02-26T14:20:00",
+      "synthetic_record_label": "SYNTHETIC - Chargeback Lifecycle Tracker mock data",
+      "edge_case_notes": "Carrier tracking has conflicting status"
+    },
+    {
+      "id": "CB-2026-1003",
+      "order_id": "ORD-901003",
+      "merchant_name": "Electronics Hub",
+      "amount": 1299.0,
+      "currency": "USD",
+      "dispute_date": "2026-01-18T09:05:00",
+      "case_status": "merchant_response",
+      "dispute_reason": "not_as_described",
+      "card_network": "amex",
+      "loss_allocation": 42.5,
+      "merchant_response_evidence": ["invoice", "product_photos", "customer_email"],
+      "root_cause_tags": ["product_expectation_gap", "return_policy_confusion"],
+      "merchant_win_rate": null,
+      "expected_resolution_date": "2026-03-04T09:05:00",
+      "synthetic_record_label": "SYNTHETIC - Chargeback Lifecycle Tracker mock data",
+      "edge_case_notes": "High-value item dispute requiring multiple evidence types"
+    },
+    {
+      "id": "CB-2026-1004",
+      "order_id": "ORD-901004",
+      "merchant_name": "Software Solutions Ltd",
+      "amount": 499.0,
+      "currency": "USD",
+      "dispute_date": "2026-01-25T16:40:00",
+      "case_status": "resolved",
+      "dispute_reason": "quality_issue",
+      "card_network": "discover",
+      "loss_allocation": 0.0,
+      "merchant_response_evidence": ["invoice", "usage_logs", "customer_email"],
+      "root_cause_tags": ["service_activation_delay", "support_response_gap"],
+      "merchant_win_rate": 91.0,
+      "expected_resolution_date": null,
+      "synthetic_record_label": "SYNTHETIC - Chargeback Lifecycle Tracker mock data",
+      "edge_case_notes": "Resolved merchant win with zero merchant liability"
+    },
+    {
+      "id": "CB-2026-1005",
+      "order_id": "ORD-901005",
+      "merchant_name": "Digital Services Co",
+      "amount": 19.99,
+      "currency": "USD",
+      "dispute_date": "2026-02-01T11:10:00",
+      "case_status": "resolved",
+      "dispute_reason": "fraud",
+      "card_network": "visa",
+      "loss_allocation": 100.0,
+      "merchant_response_evidence": [],
+      "root_cause_tags": ["authorization_issue", "missing_cvv_match"],
+      "merchant_win_rate": 0.0,
+      "expected_resolution_date": null,
+      "synthetic_record_label": "SYNTHETIC - Chargeback Lifecycle Tracker mock data",
+      "edge_case_notes": "Full merchant liability and no evidence submitted"
+    },
+    {
+      "id": "CB-2026-1006",
+      "order_id": "ORD-901006",
+      "merchant_name": "Home Goods Outlet",
+      "amount": 245.75,
+      "currency": "USD",
+      "dispute_date": "2026-02-09T13:25:00",
+      "case_status": "merchant_response",
+      "dispute_reason": "item_not_received",
+      "card_network": "mastercard",
+      "loss_allocation": 62.0,
+      "merchant_response_evidence": ["tracking_number", "delivery_signature"],
+      "root_cause_tags": ["porch_delivery_claim", "shipping_delay"],
+      "merchant_win_rate": null,
+      "expected_resolution_date": "2026-03-26T13:25:00",
+      "synthetic_record_label": "SYNTHETIC - Chargeback Lifecycle Tracker mock data",
+      "edge_case_notes": "Delivery signature exists but customer denies receipt"
+    },
+    {
+      "id": "CB-2026-1007",
+      "order_id": "ORD-901007",
+      "merchant_name": "Travel Desk Online",
+      "amount": 875.2,
+      "currency": "USD",
+      "dispute_date": "2026-02-18T08:55:00",
+      "case_status": "under_review",
+      "dispute_reason": "not_as_described",
+      "card_network": "amex",
+      "loss_allocation": 48.0,
+      "merchant_response_evidence": ["customer_email", "refund_offer"],
+      "root_cause_tags": ["cancellation_policy_confusion", "partial_refund_offer"],
+      "merchant_win_rate": null,
+      "expected_resolution_date": "2026-04-04T08:55:00",
+      "synthetic_record_label": "SYNTHETIC - Chargeback Lifecycle Tracker mock data",
+      "edge_case_notes": "Partial refund offered while issuer review remains open"
+    },
+    {
+      "id": "CB-2026-1008",
+      "order_id": "ORD-901008",
+      "merchant_name": "QuickShip Market",
+      "amount": 64.35,
+      "currency": "USD",
+      "dispute_date": "2026-02-27T15:05:00",
+      "case_status": "resolved",
+      "dispute_reason": "item_not_received",
+      "card_network": "discover",
+      "loss_allocation": 78.0,
+      "merchant_response_evidence": ["tracking_number"],
+      "root_cause_tags": ["late_delivery", "customer_regret"],
+      "merchant_win_rate": 20.0,
+      "expected_resolution_date": null,
+      "synthetic_record_label": "SYNTHETIC - Chargeback Lifecycle Tracker mock data",
+      "edge_case_notes": "Resolved customer win after late delivery"
+    },
+    {
+      "id": "CB-2026-1009",
+      "order_id": "ORD-901009",
+      "merchant_name": "TechStore Inc",
+      "amount": 2149.99,
+      "currency": "USD",
+      "dispute_date": "2026-03-05T12:45:00",
+      "case_status": "opened",
+      "dispute_reason": "fraud",
+      "card_network": "visa",
+      "loss_allocation": 70.0,
+      "merchant_response_evidence": [],
+      "root_cause_tags": ["high_value_order", "velocity_check_missed"],
+      "merchant_win_rate": null,
+      "expected_resolution_date": "2026-04-19T12:45:00",
+      "synthetic_record_label": "SYNTHETIC - Chargeback Lifecycle Tracker mock data",
+      "edge_case_notes": "High-value fraud edge case"
+    },
+    {
+      "id": "CB-2026-1010",
+      "order_id": "ORD-901010",
+      "merchant_name": "Fashion Plus",
+      "amount": 7.49,
+      "currency": "USD",
+      "dispute_date": "2026-03-12T17:30:00",
+      "case_status": "resolved",
+      "dispute_reason": "quality_issue",
+      "card_network": "mastercard",
+      "loss_allocation": 25.0,
+      "merchant_response_evidence": ["refund_offer", "customer_email"],
+      "root_cause_tags": ["low_value_dispute", "customer_regret"],
+      "merchant_win_rate": 66.7,
+      "expected_resolution_date": null,
+      "synthetic_record_label": "SYNTHETIC - Chargeback Lifecycle Tracker mock data",
+      "edge_case_notes": "Low-value quality dispute with merchant-favorable outcome"
+    },
+    {
+      "id": "CB-2026-1011",
+      "order_id": "ORD-901011",
+      "merchant_name": "Electronics Hub",
+      "amount": 699.0,
+      "currency": "USD",
+      "dispute_date": "2026-03-21T10:00:00",
+      "case_status": "under_review",
+      "dispute_reason": "fraud",
+      "card_network": "amex",
+      "loss_allocation": 58.5,
+      "merchant_response_evidence": ["invoice"],
+      "root_cause_tags": ["manual_review_required", "billing_address_mismatch"],
+      "merchant_win_rate": null,
+      "expected_resolution_date": "2026-05-05T10:00:00",
+      "synthetic_record_label": "SYNTHETIC - Chargeback Lifecycle Tracker mock data",
+      "edge_case_notes": "Issuer review delayed by billing mismatch"
+    },
+    {
+      "id": "CB-2026-1012",
+      "order_id": "ORD-901012",
+      "merchant_name": "Software Solutions Ltd",
+      "amount": 120.0,
+      "currency": "USD",
+      "dispute_date": "2026-04-02T09:35:00",
+      "case_status": "merchant_response",
+      "dispute_reason": "quality_issue",
+      "card_network": "discover",
+      "loss_allocation": 40.0,
+      "merchant_response_evidence": ["usage_logs", "support_ticket", "refund_offer"],
+      "root_cause_tags": ["service_outage", "sla_credit_pending"],
+      "merchant_win_rate": null,
+      "expected_resolution_date": "2026-05-17T09:35:00",
+      "synthetic_record_label": "SYNTHETIC - Chargeback Lifecycle Tracker mock data",
+      "edge_case_notes": "Service outage with pending SLA credit"
+    },
+    {
+      "id": "CB-2026-1013",
+      "order_id": "ORD-901013",
+      "merchant_name": "Digital Services Co",
+      "amount": 59.99,
+      "currency": "USD",
+      "dispute_date": "2026-04-11T19:15:00",
+      "case_status": "resolved",
+      "dispute_reason": "not_as_described",
+      "card_network": "visa",
+      "loss_allocation": 85.0,
+      "merchant_response_evidence": ["customer_email"],
+      "root_cause_tags": ["subscription_terms_confusion", "failed_cancellation"],
+      "merchant_win_rate": 33.3,
+      "expected_resolution_date": null,
+      "synthetic_record_label": "SYNTHETIC - Chargeback Lifecycle Tracker mock data",
+      "edge_case_notes": "Resolved customer-favorable subscription terms dispute"
+    },
+    {
+      "id": "CB-2026-1014",
+      "order_id": "ORD-901014",
+      "merchant_name": "Home Goods Outlet",
+      "amount": 340.4,
+      "currency": "USD",
+      "dispute_date": "2026-04-20T07:50:00",
+      "case_status": "opened",
+      "dispute_reason": "item_not_received",
+      "card_network": "mastercard",
+      "loss_allocation": 52.0,
+      "merchant_response_evidence": [],
+      "root_cause_tags": ["address_change_after_order", "carrier_scan_gap"],
+      "merchant_win_rate": null,
+      "expected_resolution_date": "2026-05-20T07:50:00",
+      "synthetic_record_label": "SYNTHETIC - Chargeback Lifecycle Tracker mock data",
+      "edge_case_notes": "Pending case past expected resolution date"
+    },
+    {
+      "id": "CB-2026-1015",
+      "order_id": "ORD-901015",
+      "merchant_name": "QuickShip Market",
+      "amount": 180.8,
+      "currency": "USD",
+      "dispute_date": "2026-05-03T18:05:00",
+      "case_status": "merchant_response",
+      "dispute_reason": "fraud",
+      "card_network": "discover",
+      "loss_allocation": 60.0,
+      "merchant_response_evidence": ["invoice", "customer_email", "delivery_signature"],
+      "root_cause_tags": ["duplicate_charge", "processor_retry"],
+      "merchant_win_rate": null,
+      "expected_resolution_date": "2026-06-17T18:05:00",
+      "synthetic_record_label": "SYNTHETIC - Chargeback Lifecycle Tracker mock data",
+      "edge_case_notes": "Duplicate charge investigation in merchant response state"
+    },
+    {
+      "id": "CB-2026-1016",
+      "order_id": "ORD-901016",
+      "merchant_name": "Travel Desk Online",
+      "amount": 1520.0,
+      "currency": "USD",
+      "dispute_date": "2026-05-19T21:30:00",
+      "case_status": "resolved",
+      "dispute_reason": "not_as_described",
+      "card_network": "amex",
+      "loss_allocation": 12.0,
+      "merchant_response_evidence": ["invoice", "customer_email", "refund_offer"],
+      "root_cause_tags": ["cancellation_policy_confusion", "documented_terms"],
+      "merchant_win_rate": 88.5,
+      "expected_resolution_date": null,
+      "synthetic_record_label": "SYNTHETIC - Chargeback Lifecycle Tracker mock data",
+      "edge_case_notes": "High-value travel dispute resolved mostly in merchant favor"
+    }
+  ]
+}
+</file>
+
+<file path="backend/mock_data/data_dictionary.json">
+{
+  "title": "Chargeback Lifecycle Tracker",
+  "synthetic_data_notice": "All entities and records in this package are synthetic mock data for the Chargeback Lifecycle Tracker PoC.",
+  "entities": [
+    {
+      "name": "ChargebackCase",
+      "description": "Synthetic payment dispute case used for chargeback lifecycle analytics.",
+      "source_files": [
+        "chargeback_cases.csv",
+        "chargeback_cases.json"
+      ],
+      "fields": [
+        {
+          "name": "id",
+          "type": "string",
+          "definition": "Synthetic unique chargeback case identifier.",
+          "example": "CB-2026-1001"
+        },
+        {
+          "name": "order_id",
+          "type": "string",
+          "definition": "Synthetic order identifier associated with the dispute.",
+          "example": "ORD-901001"
+        },
+        {
+          "name": "merchant_name",
+          "type": "string",
+          "definition": "Synthetic merchant display name.",
+          "example": "TechStore Inc"
+        },
+        {
+          "name": "amount",
+          "type": "number",
+          "definition": "Disputed transaction amount in the provided currency.",
+          "example": 349.99
+        },
+        {
+          "name": "currency",
+          "type": "string",
+          "definition": "ISO-style transaction currency code.",
+          "allowed_values": [
+            "USD"
+          ]
+        },
+        {
+          "name": "dispute_date",
+          "type": "datetime",
+          "definition": "Synthetic ISO 8601 timestamp when the dispute was opened."
+        },
+        {
+          "name": "case_status",
+          "type": "string",
+          "definition": "Current lifecycle state of the synthetic case.",
+          "allowed_values": [
+            "opened",
+            "under_review",
+            "merchant_response",
+            "resolved"
+          ]
+        },
+        {
+          "name": "dispute_reason",
+          "type": "string",
+          "definition": "Primary network-style reason category for the synthetic dispute.",
+          "allowed_values": [
+            "fraud",
+            "item_not_received",
+            "quality_issue",
+            "not_as_described"
+          ]
+        },
+        {
+          "name": "card_network",
+          "type": "string",
+          "definition": "Synthetic payment network.",
+          "allowed_values": [
+            "visa",
+            "mastercard",
+            "amex",
+            "discover"
+          ]
+        },
+        {
+          "name": "loss_allocation",
+          "type": "number",
+          "definition": "Percentage of disputed amount allocated to merchant liability."
+        },
+        {
+          "name": "merchant_response_evidence",
+          "type": "array<string>",
+          "definition": "Evidence artifacts submitted by the merchant. Empty arrays indicate no evidence submitted."
+        },
+        {
+          "name": "root_cause_tags",
+          "type": "array<string>",
+          "definition": "Synthetic operational tags explaining likely dispute drivers."
+        },
+        {
+          "name": "merchant_win_rate",
+          "type": "number|null",
+          "definition": "Synthetic case-level outcome confidence or win indicator for resolved disputes."
+        },
+        {
+          "name": "expected_resolution_date",
+          "type": "datetime|null",
+          "definition": "Synthetic expected resolution timestamp for unresolved disputes."
+        },
+        {
+          "name": "synthetic_record_label",
+          "type": "string",
+          "definition": "Required label making clear that every row is synthetic."
+        },
+        {
+          "name": "edge_case_notes",
+          "type": "string|null",
+          "definition": "Notes for unusual or error-state coverage represented by the record."
+        }
+      ]
+    },
+    {
+      "name": "TimelineEvent",
+      "description": "Synthetic lifecycle event derived by the API from a chargeback case status.",
+      "source_files": [
+        "timeline_events.csv",
+        "timeline_events.json"
+      ],
+      "fields": [
+        {
+          "name": "case_id",
+          "type": "string",
+          "definition": "Synthetic chargeback case identifier that owns the timeline event."
+        },
+        {
+          "name": "timestamp",
+          "type": "datetime",
+          "definition": "Synthetic ISO 8601 timestamp for the event."
+        },
+        {
+          "name": "event_type",
+          "type": "string",
+          "definition": "Lifecycle event category.",
+          "allowed_values": [
+            "opened",
+            "bank_review",
+            "response_submitted",
+            "resolved"
+          ]
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "definition": "Synthetic event description."
+        },
+        {
+          "name": "actor",
+          "type": "string",
+          "definition": "Synthetic party responsible for the event.",
+          "allowed_values": [
+            "merchant",
+            "customer",
+            "issuer",
+            "acquirer"
+          ]
+        },
+        {
+          "name": "synthetic_record_label",
+          "type": "string",
+          "definition": "Required label making clear that every timeline row is synthetic."
+        }
+      ]
+    }
+  ],
+  "edge_cases": [
+    "High-value fraud dispute",
+    "No merchant evidence submitted",
+    "Duplicate charge investigation",
+    "Zero merchant liability",
+    "Full merchant liability",
+    "Pending case past expected resolution",
+    "Low-value quality dispute",
+    "Settlement or merchant-response state"
+  ]
+}
+</file>
+
+<file path="backend/mock_data/README.md">
+# Chargeback Lifecycle Tracker Mock Data Package
+
+This package contains synthetic mock data for the Chargeback Lifecycle Tracker PoC.
+
+Every record is labeled with `synthetic_record_label = "SYNTHETIC - Chargeback Lifecycle Tracker mock data"` and must not be treated as production, customer, merchant, or processor data.
+
+## Files
+
+- `chargeback_cases.csv`: Primary backend source for mock chargeback case records.
+- `chargeback_cases.json`: JSON export of the same records for tooling and review.
+- `timeline_events.csv`: Primary backend source for mock lifecycle timeline records.
+- `timeline_events.json`: JSON export of the same timeline records for tooling and review.
+- `data_dictionary.json`: Entity and field dictionary, allowed values, and edge-case coverage notes.
+
+## Entities
+
+- `ChargebackCase`: A synthetic payment dispute case used by the dashboard, filters, statistics, and sample export.
+- `TimelineEvent`: A synthetic lifecycle event derived from each case status for the timeline view.
+
+## Edge-Case Coverage
+
+The rows include unusual and error-state scenarios such as high-value disputes, missing merchant evidence, duplicate charge investigations, zero merchant liability, full merchant liability, pending cases past expected resolution, and settled merchant-response cases.
+</file>
+
+<file path="backend/mock_data/timeline_events.csv">
+case_id,timestamp,event_type,description,actor,synthetic_record_label
+CB-2026-1001,2026-01-08T10:15:00,opened,Customer initiated fraud dispute,customer,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+CB-2026-1002,2026-01-12T14:20:00,opened,Customer reported item not received,customer,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+CB-2026-1002,2026-01-14T14:20:00,bank_review,Issuer started carrier evidence review,issuer,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+CB-2026-1003,2026-01-18T09:05:00,opened,Customer disputed item description,customer,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+CB-2026-1003,2026-01-20T09:05:00,bank_review,Issuer requested product evidence,issuer,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+CB-2026-1003,2026-01-23T09:05:00,response_submitted,Merchant submitted invoice photos and customer messages,merchant,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+CB-2026-1004,2026-01-25T16:40:00,opened,Customer reported quality issue,customer,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+CB-2026-1004,2026-01-27T16:40:00,bank_review,Issuer reviewed service activation records,issuer,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+CB-2026-1004,2026-01-30T16:40:00,response_submitted,Merchant submitted usage logs and support messages,merchant,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+CB-2026-1004,2026-02-04T16:40:00,resolved,Case resolved in favor of merchant,issuer,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+CB-2026-1005,2026-02-01T11:10:00,opened,Customer initiated fraud dispute,customer,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+CB-2026-1005,2026-02-03T11:10:00,bank_review,Issuer found missing verification evidence,issuer,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+CB-2026-1005,2026-02-06T11:10:00,response_submitted,Merchant did not provide supporting evidence,merchant,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+CB-2026-1005,2026-02-10T11:10:00,resolved,Case resolved in favor of customer,issuer,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+CB-2026-1006,2026-02-09T13:25:00,opened,Customer denied receiving delivery,customer,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+CB-2026-1006,2026-02-11T13:25:00,bank_review,Issuer requested delivery confirmation,issuer,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+CB-2026-1006,2026-02-14T13:25:00,response_submitted,Merchant submitted tracking and signature evidence,merchant,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+CB-2026-1007,2026-02-18T08:55:00,opened,Customer disputed travel description,customer,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+CB-2026-1007,2026-02-21T08:55:00,bank_review,Issuer reviewing cancellation and refund terms,issuer,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+CB-2026-1008,2026-02-27T15:05:00,opened,Customer reported item not received,customer,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+CB-2026-1008,2026-03-01T15:05:00,bank_review,Issuer reviewed late carrier scan,issuer,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+CB-2026-1008,2026-03-04T15:05:00,response_submitted,Merchant submitted tracking record,merchant,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+CB-2026-1008,2026-03-09T15:05:00,resolved,Case resolved in favor of customer,issuer,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+CB-2026-1009,2026-03-05T12:45:00,opened,High-value fraud dispute opened,customer,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+CB-2026-1010,2026-03-12T17:30:00,opened,Customer opened low-value quality dispute,customer,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+CB-2026-1010,2026-03-14T17:30:00,bank_review,Issuer reviewed refund offer,issuer,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+CB-2026-1010,2026-03-17T17:30:00,response_submitted,Merchant submitted customer email and refund offer,merchant,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+CB-2026-1010,2026-03-21T17:30:00,resolved,Case resolved mostly in favor of merchant,issuer,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+CB-2026-1011,2026-03-21T10:00:00,opened,Fraud dispute opened after billing mismatch,customer,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+CB-2026-1011,2026-03-24T10:00:00,bank_review,Issuer escalated for manual review,issuer,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+CB-2026-1012,2026-04-02T09:35:00,opened,Customer disputed service quality,customer,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+CB-2026-1012,2026-04-04T09:35:00,bank_review,Issuer requested outage and SLA records,issuer,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+CB-2026-1012,2026-04-07T09:35:00,response_submitted,Merchant submitted usage logs support ticket and refund offer,merchant,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+CB-2026-1013,2026-04-11T19:15:00,opened,Customer disputed subscription terms,customer,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+CB-2026-1013,2026-04-13T19:15:00,bank_review,Issuer reviewed cancellation trail,issuer,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+CB-2026-1013,2026-04-16T19:15:00,response_submitted,Merchant submitted customer email history,merchant,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+CB-2026-1013,2026-04-21T19:15:00,resolved,Case resolved in favor of customer,issuer,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+CB-2026-1014,2026-04-20T07:50:00,opened,Customer reported missing delivery after address change,customer,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+CB-2026-1015,2026-05-03T18:05:00,opened,Customer reported possible duplicate charge,customer,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+CB-2026-1015,2026-05-05T18:05:00,bank_review,Issuer requested processor retry evidence,issuer,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+CB-2026-1015,2026-05-08T18:05:00,response_submitted,Merchant submitted invoice messages and delivery signature,merchant,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+CB-2026-1016,2026-05-19T21:30:00,opened,Customer disputed travel booking description,customer,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+CB-2026-1016,2026-05-21T21:30:00,bank_review,Issuer reviewed documented booking terms,issuer,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+CB-2026-1016,2026-05-24T21:30:00,response_submitted,Merchant submitted invoice messages and refund offer,merchant,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+CB-2026-1016,2026-05-29T21:30:00,resolved,Case resolved mostly in favor of merchant,issuer,SYNTHETIC - Chargeback Lifecycle Tracker mock data
+</file>
+
+<file path="backend/mock_data/timeline_events.json">
+{
+    "title":  "Chargeback Lifecycle Tracker",
+    "synthetic_data_notice":  "All timeline records are synthetic mock data and are not production, customer, merchant, or processor data.",
+    "records":  [
+                    {
+                        "case_id":  "CB-2026-1001",
+                        "timestamp":  "2026-01-08T10:15:00",
+                        "event_type":  "opened",
+                        "description":  "Customer initiated fraud dispute",
+                        "actor":  "customer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1002",
+                        "timestamp":  "2026-01-12T14:20:00",
+                        "event_type":  "opened",
+                        "description":  "Customer reported item not received",
+                        "actor":  "customer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1002",
+                        "timestamp":  "2026-01-14T14:20:00",
+                        "event_type":  "bank_review",
+                        "description":  "Issuer started carrier evidence review",
+                        "actor":  "issuer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1003",
+                        "timestamp":  "2026-01-18T09:05:00",
+                        "event_type":  "opened",
+                        "description":  "Customer disputed item description",
+                        "actor":  "customer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1003",
+                        "timestamp":  "2026-01-20T09:05:00",
+                        "event_type":  "bank_review",
+                        "description":  "Issuer requested product evidence",
+                        "actor":  "issuer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1003",
+                        "timestamp":  "2026-01-23T09:05:00",
+                        "event_type":  "response_submitted",
+                        "description":  "Merchant submitted invoice photos and customer messages",
+                        "actor":  "merchant",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1004",
+                        "timestamp":  "2026-01-25T16:40:00",
+                        "event_type":  "opened",
+                        "description":  "Customer reported quality issue",
+                        "actor":  "customer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1004",
+                        "timestamp":  "2026-01-27T16:40:00",
+                        "event_type":  "bank_review",
+                        "description":  "Issuer reviewed service activation records",
+                        "actor":  "issuer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1004",
+                        "timestamp":  "2026-01-30T16:40:00",
+                        "event_type":  "response_submitted",
+                        "description":  "Merchant submitted usage logs and support messages",
+                        "actor":  "merchant",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1004",
+                        "timestamp":  "2026-02-04T16:40:00",
+                        "event_type":  "resolved",
+                        "description":  "Case resolved in favor of merchant",
+                        "actor":  "issuer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1005",
+                        "timestamp":  "2026-02-01T11:10:00",
+                        "event_type":  "opened",
+                        "description":  "Customer initiated fraud dispute",
+                        "actor":  "customer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1005",
+                        "timestamp":  "2026-02-03T11:10:00",
+                        "event_type":  "bank_review",
+                        "description":  "Issuer found missing verification evidence",
+                        "actor":  "issuer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1005",
+                        "timestamp":  "2026-02-06T11:10:00",
+                        "event_type":  "response_submitted",
+                        "description":  "Merchant did not provide supporting evidence",
+                        "actor":  "merchant",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1005",
+                        "timestamp":  "2026-02-10T11:10:00",
+                        "event_type":  "resolved",
+                        "description":  "Case resolved in favor of customer",
+                        "actor":  "issuer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1006",
+                        "timestamp":  "2026-02-09T13:25:00",
+                        "event_type":  "opened",
+                        "description":  "Customer denied receiving delivery",
+                        "actor":  "customer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1006",
+                        "timestamp":  "2026-02-11T13:25:00",
+                        "event_type":  "bank_review",
+                        "description":  "Issuer requested delivery confirmation",
+                        "actor":  "issuer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1006",
+                        "timestamp":  "2026-02-14T13:25:00",
+                        "event_type":  "response_submitted",
+                        "description":  "Merchant submitted tracking and signature evidence",
+                        "actor":  "merchant",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1007",
+                        "timestamp":  "2026-02-18T08:55:00",
+                        "event_type":  "opened",
+                        "description":  "Customer disputed travel description",
+                        "actor":  "customer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1007",
+                        "timestamp":  "2026-02-21T08:55:00",
+                        "event_type":  "bank_review",
+                        "description":  "Issuer reviewing cancellation and refund terms",
+                        "actor":  "issuer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1008",
+                        "timestamp":  "2026-02-27T15:05:00",
+                        "event_type":  "opened",
+                        "description":  "Customer reported item not received",
+                        "actor":  "customer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1008",
+                        "timestamp":  "2026-03-01T15:05:00",
+                        "event_type":  "bank_review",
+                        "description":  "Issuer reviewed late carrier scan",
+                        "actor":  "issuer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1008",
+                        "timestamp":  "2026-03-04T15:05:00",
+                        "event_type":  "response_submitted",
+                        "description":  "Merchant submitted tracking record",
+                        "actor":  "merchant",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1008",
+                        "timestamp":  "2026-03-09T15:05:00",
+                        "event_type":  "resolved",
+                        "description":  "Case resolved in favor of customer",
+                        "actor":  "issuer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1009",
+                        "timestamp":  "2026-03-05T12:45:00",
+                        "event_type":  "opened",
+                        "description":  "High-value fraud dispute opened",
+                        "actor":  "customer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1010",
+                        "timestamp":  "2026-03-12T17:30:00",
+                        "event_type":  "opened",
+                        "description":  "Customer opened low-value quality dispute",
+                        "actor":  "customer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1010",
+                        "timestamp":  "2026-03-14T17:30:00",
+                        "event_type":  "bank_review",
+                        "description":  "Issuer reviewed refund offer",
+                        "actor":  "issuer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1010",
+                        "timestamp":  "2026-03-17T17:30:00",
+                        "event_type":  "response_submitted",
+                        "description":  "Merchant submitted customer email and refund offer",
+                        "actor":  "merchant",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1010",
+                        "timestamp":  "2026-03-21T17:30:00",
+                        "event_type":  "resolved",
+                        "description":  "Case resolved mostly in favor of merchant",
+                        "actor":  "issuer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1011",
+                        "timestamp":  "2026-03-21T10:00:00",
+                        "event_type":  "opened",
+                        "description":  "Fraud dispute opened after billing mismatch",
+                        "actor":  "customer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1011",
+                        "timestamp":  "2026-03-24T10:00:00",
+                        "event_type":  "bank_review",
+                        "description":  "Issuer escalated for manual review",
+                        "actor":  "issuer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1012",
+                        "timestamp":  "2026-04-02T09:35:00",
+                        "event_type":  "opened",
+                        "description":  "Customer disputed service quality",
+                        "actor":  "customer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1012",
+                        "timestamp":  "2026-04-04T09:35:00",
+                        "event_type":  "bank_review",
+                        "description":  "Issuer requested outage and SLA records",
+                        "actor":  "issuer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1012",
+                        "timestamp":  "2026-04-07T09:35:00",
+                        "event_type":  "response_submitted",
+                        "description":  "Merchant submitted usage logs support ticket and refund offer",
+                        "actor":  "merchant",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1013",
+                        "timestamp":  "2026-04-11T19:15:00",
+                        "event_type":  "opened",
+                        "description":  "Customer disputed subscription terms",
+                        "actor":  "customer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1013",
+                        "timestamp":  "2026-04-13T19:15:00",
+                        "event_type":  "bank_review",
+                        "description":  "Issuer reviewed cancellation trail",
+                        "actor":  "issuer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1013",
+                        "timestamp":  "2026-04-16T19:15:00",
+                        "event_type":  "response_submitted",
+                        "description":  "Merchant submitted customer email history",
+                        "actor":  "merchant",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1013",
+                        "timestamp":  "2026-04-21T19:15:00",
+                        "event_type":  "resolved",
+                        "description":  "Case resolved in favor of customer",
+                        "actor":  "issuer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1014",
+                        "timestamp":  "2026-04-20T07:50:00",
+                        "event_type":  "opened",
+                        "description":  "Customer reported missing delivery after address change",
+                        "actor":  "customer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1015",
+                        "timestamp":  "2026-05-03T18:05:00",
+                        "event_type":  "opened",
+                        "description":  "Customer reported possible duplicate charge",
+                        "actor":  "customer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1015",
+                        "timestamp":  "2026-05-05T18:05:00",
+                        "event_type":  "bank_review",
+                        "description":  "Issuer requested processor retry evidence",
+                        "actor":  "issuer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1015",
+                        "timestamp":  "2026-05-08T18:05:00",
+                        "event_type":  "response_submitted",
+                        "description":  "Merchant submitted invoice messages and delivery signature",
+                        "actor":  "merchant",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1016",
+                        "timestamp":  "2026-05-19T21:30:00",
+                        "event_type":  "opened",
+                        "description":  "Customer disputed travel booking description",
+                        "actor":  "customer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1016",
+                        "timestamp":  "2026-05-21T21:30:00",
+                        "event_type":  "bank_review",
+                        "description":  "Issuer reviewed documented booking terms",
+                        "actor":  "issuer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1016",
+                        "timestamp":  "2026-05-24T21:30:00",
+                        "event_type":  "response_submitted",
+                        "description":  "Merchant submitted invoice messages and refund offer",
+                        "actor":  "merchant",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    },
+                    {
+                        "case_id":  "CB-2026-1016",
+                        "timestamp":  "2026-05-29T21:30:00",
+                        "event_type":  "resolved",
+                        "description":  "Case resolved mostly in favor of merchant",
+                        "actor":  "issuer",
+                        "synthetic_record_label":  "SYNTHETIC - Chargeback Lifecycle Tracker mock data"
+                    }
+                ]
+}
 </file>
 
 <file path="backend/requirements.txt">
@@ -623,56 +1575,6 @@ body {
 }
 </file>
 
-<file path="frontend/src/types/index.ts">
-export interface ChargebackCase {
-  id: string;
-  order_id: string;
-  merchant_name: string;
-  amount: number;
-  currency: string;
-  dispute_date: string;
-  case_status: 'opened' | 'under_review' | 'merchant_response' | 'resolved';
-  dispute_reason: 'fraud' | 'item_not_received' | 'quality_issue' | 'not_as_described';
-  card_network: 'visa' | 'mastercard' | 'amex' | 'discover';
-  loss_allocation: number;
-  merchant_response_evidence: string[];
-  root_cause_tags: string[];
-  merchant_win_rate?: number;
-  expected_resolution_date?: string;
-}
-
-export interface TimelineEvent {
-  timestamp: string;
-  event_type: 'opened' | 'response_submitted' | 'bank_review' | 'resolved';
-  description: string;
-  actor: 'merchant' | 'customer' | 'issuer' | 'acquirer';
-}
-
-export interface ChargebackStats {
-  total_cases: number;
-  open_cases: number;
-  resolved_cases: number;
-  merchant_win_count: number;
-  merchant_loss_count: number;
-  avg_dispute_amount: number;
-  total_chargeback_volume: number;
-}
-
-export interface DisputeOutcomeStats {
-  favorable_to_merchant: number;
-  favorable_to_customer: number;
-  pending: number;
-  settlement: number;
-}
-
-export interface FilterState {
-  status?: string;
-  merchant?: string;
-  reason?: string;
-  network?: string;
-}
-</file>
-
 <file path="frontend/tailwind.config.js">
 module.exports = {
   content: [
@@ -713,66 +1615,6 @@ module.exports = {
   },
   plugins: [],
 };
-</file>
-
-<file path="frontend/tsconfig.json">
-{
-  "compilerOptions": {
-    "ignoreDeprecations": "6.0",
-    "target": "ES2020",
-    "useDefineForClassFields": true,
-    "lib": [
-      "ES2020",
-      "DOM",
-      "DOM.Iterable"
-    ],
-    "module": "ESNext",
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "strictBindCallApply": true,
-    "strictPropertyInitialization": true,
-    "noImplicitThis": true,
-    "alwaysStrict": true,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
-    "jsx": "preserve",
-    "baseUrl": ".",
-    "paths": {
-      "@/*": [
-        "./src/*"
-      ]
-    },
-    "allowJs": true,
-    "noEmit": true,
-    "incremental": true,
-    "isolatedModules": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ]
-  },
-  "include": [
-    "src",
-    "next-env.d.ts",
-    ".next/types/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
-}
 </file>
 
 <file path="images/.gitkeep">
@@ -1021,420 +1863,6 @@ The dashboard successfully implements the required chargeback lifecycle visualiz
 
 <file path=".gitattributes">
 * text=auto
-</file>
-
-<file path="backend/main.py">
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-from typing import List, Optional
-from datetime import datetime, timedelta
-import json
-
-app = FastAPI(title="Chargeback Lifecycle Tracker API")
-
-# CORS Configuration
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-# ==================== DATA MODELS ====================
-
-class ChargebackCase(BaseModel):
-    id: str
-    order_id: str
-    merchant_name: str
-    amount: float
-    currency: str
-    dispute_date: str
-    case_status: str  # opened, under_review, merchant_response, resolved
-    dispute_reason: str  # fraud, item_not_received, quality_issue, not_as_described
-    card_network: str  # visa, mastercard, amex, discover
-    loss_allocation: float  # percentage allocated to merchant
-    merchant_response_evidence: List[str]
-    root_cause_tags: List[str]
-    merchant_win_rate: Optional[float] = None
-    expected_resolution_date: Optional[str] = None
-
-
-class ChargebackStats(BaseModel):
-    total_cases: int
-    open_cases: int
-    resolved_cases: int
-    merchant_win_count: int
-    merchant_loss_count: int
-    avg_dispute_amount: float
-    total_chargeback_volume: float
-
-
-class TimelineEvent(BaseModel):
-    timestamp: str
-    event_type: str  # opened, response_submitted, bank_review, resolved
-    description: str
-    actor: str  # merchant, customer, issuer, acquirer
-
-
-class DisputeOutcomeStats(BaseModel):
-    favorable_to_merchant: int
-    favorable_to_customer: int
-    pending: int
-    settlement: int
-
-
-# ==================== MOCK DATA GENERATOR ====================
-
-def generate_mock_cases() -> List[ChargebackCase]:
-    """Generate realistic synthetic chargeback case history"""
-    merchants = ["TechStore Inc", "Fashion Plus", "Electronics Hub", "Software Solutions Ltd", "Digital Services Co"]
-    reasons = ["fraud", "item_not_received", "quality_issue", "not_as_described"]
-    networks = ["visa", "mastercard", "amex", "discover"]
-    statuses = ["opened", "under_review", "merchant_response", "resolved"]
-    evidence_types = ["invoice", "tracking_number", "customer_email", "delivery_signature", "product_photos", "refund_offer"]
-    root_causes = ["shipping_delay", "packaging_damage", "authorization_issue", "duplicate_charge", "customer_regret", "processing_error"]
-    
-    base_date = datetime.now() - timedelta(days=180)
-    cases = []
-    
-    for i in range(25):
-        days_offset = i * 7
-        dispute_date = (base_date + timedelta(days=days_offset)).isoformat()
-        
-        case = ChargebackCase(
-            id=f"CB-2024-{1000 + i}",
-            order_id=f"ORD-{100000 + i}",
-            merchant_name=merchants[i % len(merchants)],
-            amount=round(50 + (i * 37.5) % 950, 2),
-            currency="USD",
-            dispute_date=dispute_date,
-            case_status=statuses[i % len(statuses)],
-            dispute_reason=reasons[i % len(reasons)],
-            card_network=networks[i % len(networks)],
-            loss_allocation=round(20 + (i * 3.5) % 75, 1),
-            merchant_response_evidence=[evidence_types[i % len(evidence_types)]] if i % 2 == 0 else [],
-            root_cause_tags=[root_causes[i % len(root_causes)], root_causes[(i+1) % len(root_causes)]],
-            merchant_win_rate=round((i % 3) * 33.3, 1) if statuses[i % len(statuses)] == "resolved" else None,
-            expected_resolution_date=(base_date + timedelta(days=days_offset + 45)).isoformat() if statuses[i % len(statuses)] != "resolved" else None,
-        )
-        cases.append(case)
-    
-    return cases
-
-
-def generate_mock_timeline(case_id: str) -> List[TimelineEvent]:
-    """Generate different timelines based on case id"""
-
-    case_num = int(case_id.split("-")[-1])
-
-    base_date = datetime.now() - timedelta(
-        days=(case_num % 20) + 10
-    )
-
-    pattern = case_num % 4
-
-    if pattern == 0:
-        return [
-            TimelineEvent(
-                timestamp=base_date.isoformat(),
-                event_type="opened",
-                description="Customer initiated dispute",
-                actor="customer",
-            ),
-            TimelineEvent(
-                timestamp=(base_date + timedelta(days=2)).isoformat(),
-                event_type="bank_review",
-                description="Issuing bank started investigation",
-                actor="issuer",
-            ),
-            TimelineEvent(
-                timestamp=(base_date + timedelta(days=5)).isoformat(),
-                event_type="response_submitted",
-                description="Merchant submitted evidence",
-                actor="merchant",
-            ),
-            TimelineEvent(
-                timestamp=(base_date + timedelta(days=11)).isoformat(),
-                event_type="resolved",
-                description="Case resolved in favor of merchant",
-                actor="issuer",
-            ),
-        ]
-
-    elif pattern == 1:
-        return [
-            TimelineEvent(
-                timestamp=base_date.isoformat(),
-                event_type="opened",
-                description="Dispute opened",
-                actor="customer",
-            ),
-            TimelineEvent(
-                timestamp=(base_date + timedelta(days=4)).isoformat(),
-                event_type="bank_review",
-                description="Investigation ongoing",
-                actor="issuer",
-            ),
-        ]
-
-    elif pattern == 2:
-        return [
-            TimelineEvent(
-                timestamp=base_date.isoformat(),
-                event_type="opened",
-                description="Chargeback initiated",
-                actor="customer",
-            ),
-            TimelineEvent(
-                timestamp=(base_date + timedelta(days=3)).isoformat(),
-                event_type="bank_review",
-                description="Evidence requested",
-                actor="issuer",
-            ),
-            TimelineEvent(
-                timestamp=(base_date + timedelta(days=8)).isoformat(),
-                event_type="response_submitted",
-                description="Merchant submitted supporting documents",
-                actor="merchant",
-            ),
-        ]
-
-    else:
-        return [
-            TimelineEvent(
-                timestamp=base_date.isoformat(),
-                event_type="opened",
-                description="Fraud dispute initiated",
-                actor="customer",
-            ),
-            TimelineEvent(
-                timestamp=(base_date + timedelta(days=5)).isoformat(),
-                event_type="bank_review",
-                description="Issuer investigation completed",
-                actor="issuer",
-            ),
-            TimelineEvent(
-                timestamp=(base_date + timedelta(days=9)).isoformat(),
-                event_type="resolved",
-                description="Resolved in favor of customer",
-                actor="issuer",
-            ),
-        ]
-
-
-# ==================== API ENDPOINTS ====================
-
-@app.get("/")
-async def root():
-    """Health check endpoint"""
-    return {
-        "service": "Chargeback Lifecycle Tracker API",
-        "version": "1.0.0",
-        "status": "operational"
-    }
-
-
-@app.get("/api/cases", response_model=List[ChargebackCase])
-async def get_cases(
-    status: Optional[str] = None,
-    merchant: Optional[str] = None,
-    reason: Optional[str] = None,
-    network: Optional[str] = None,
-    limit: int = 50
-):
-    """
-    Retrieve chargeback cases with optional filtering.
-    
-    Query Parameters:
-    - status: Filter by case status (opened, under_review, merchant_response, resolved)
-    - merchant: Filter by merchant name (partial match)
-    - limit: Maximum number of cases to return
-    """
-    cases = generate_mock_cases()
-    
-    if status:
-        cases = [c for c in cases if c.case_status == status]
-
-    if merchant:
-        cases = [c for c in cases if merchant.lower() in c.merchant_name.lower()]
-
-    if reason:
-        cases = [c for c in cases if c.dispute_reason == reason]
-
-    if network:
-        cases = [c for c in cases if c.card_network == network]
-    
-    return cases[:limit]
-
-def generate_timeline_for_status(
-    case_status: str
-) -> List[TimelineEvent]:
-
-    base_date = datetime.now() - timedelta(days=14)
-
-    opened_event = TimelineEvent(
-        timestamp=base_date.isoformat(),
-        event_type="opened",
-        description="Customer initiated dispute",
-        actor="customer",
-    )
-
-    review_event = TimelineEvent(
-        timestamp=(base_date + timedelta(days=2)).isoformat(),
-        event_type="bank_review",
-        description="Issuing bank started investigation",
-        actor="issuer",
-    )
-
-    response_event = TimelineEvent(
-        timestamp=(base_date + timedelta(days=5)).isoformat(),
-        event_type="response_submitted",
-        description="Merchant submitted evidence",
-        actor="merchant",
-    )
-
-    resolved_event = TimelineEvent(
-        timestamp=(base_date + timedelta(days=10)).isoformat(),
-        event_type="resolved",
-        description="Case resolved",
-        actor="issuer",
-    )
-
-    if case_status == "opened":
-        return [
-            opened_event
-        ]
-
-    if case_status == "under_review":
-        return [
-            opened_event,
-            review_event,
-        ]
-
-    if case_status == "merchant_response":
-        return [
-            opened_event,
-            review_event,
-            response_event,
-        ]
-
-    if case_status == "resolved":
-        return [
-            opened_event,
-            review_event,
-            response_event,
-            resolved_event,
-        ]
-
-    return [opened_event]
-
-@app.get("/api/cases/{case_id}", response_model=ChargebackCase)
-async def get_case(case_id: str):
-    """Retrieve a specific chargeback case by ID"""
-    cases = generate_mock_cases()
-    case = next((c for c in cases if c.id == case_id), None)
-    
-    if not case:
-        return {"error": "Case not found"}, 404
-    
-    return case
-
-
-@app.get("/api/cases/{case_id}/timeline", response_model=List[TimelineEvent])
-async def get_case_timeline(case_id: str):
-    """Retrieve timeline matching actual case status"""
-
-    cases = generate_mock_cases()
-
-    case = next(
-        (c for c in cases if c.id == case_id),
-        None
-    )
-
-    if not case:
-        return []
-
-    return generate_timeline_for_status(
-        case.case_status
-    )
-
-
-@app.get("/api/stats", response_model=ChargebackStats)
-async def get_stats():
-    """Retrieve overall chargeback statistics"""
-    cases = generate_mock_cases()
-    
-    open_cases = len([c for c in cases if c.case_status in ["opened", "under_review"]])
-    resolved_cases = len([c for c in cases if c.case_status == "resolved"])
-    merchant_wins = len([c for c in cases if c.case_status == "resolved" and c.merchant_win_rate and c.merchant_win_rate > 50])
-    merchant_losses = resolved_cases - merchant_wins
-    
-    avg_amount = sum(c.amount for c in cases) / len(cases) if cases else 0
-    total_volume = sum(c.amount for c in cases)
-    
-    return ChargebackStats(
-        total_cases=len(cases),
-        open_cases=open_cases,
-        resolved_cases=resolved_cases,
-        merchant_win_count=merchant_wins,
-        merchant_loss_count=merchant_losses,
-        avg_dispute_amount=round(avg_amount, 2),
-        total_chargeback_volume=round(total_volume, 2)
-    )
-
-
-@app.get("/api/dispute-outcomes", response_model=DisputeOutcomeStats)
-async def get_dispute_outcomes():
-    """Retrieve dispute outcome statistics"""
-    cases = generate_mock_cases()
-    
-    favorable_merchant = len([c for c in cases if c.case_status == "resolved" and c.merchant_win_rate and c.merchant_win_rate > 50])
-    favorable_customer = len([c for c in cases if c.case_status == "resolved" and c.merchant_win_rate and c.merchant_win_rate <= 50])
-    pending = len([c for c in cases if c.case_status in ["opened", "under_review"]])
-    settlement = len([c for c in cases if c.case_status == "merchant_response"])
-    
-    return DisputeOutcomeStats(
-        favorable_to_merchant=favorable_merchant,
-        favorable_to_customer=favorable_customer,
-        pending=pending,
-        settlement=settlement
-    )
-
-
-@app.get("/api/sample-data")
-async def download_sample_data():
-    """Provide downloadable sample chargeback data"""
-    cases = generate_mock_cases()
-    
-    data = {
-        "export_date": datetime.now().isoformat(),
-        "total_records": len(cases),
-        "cases": [
-            {
-                "id": c.id,
-                "order_id": c.order_id,
-                "merchant_name": c.merchant_name,
-                "amount": c.amount,
-                "currency": c.currency,
-                "dispute_date": c.dispute_date,
-                "case_status": c.case_status,
-                "dispute_reason": c.dispute_reason,
-                "card_network": c.card_network,
-                "loss_allocation": c.loss_allocation,
-                "root_cause_tags": c.root_cause_tags,
-            }
-            for c in cases
-        ]
-    }
-    
-    return data
-
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
 </file>
 
 <file path="frontend/src/app/page.tsx">
@@ -2704,6 +3132,423 @@ export const api = {
 };
 
 export default api;
+</file>
+
+<file path="frontend/src/types/index.ts">
+export interface ChargebackCase {
+  id: string;
+  order_id: string;
+  merchant_name: string;
+  amount: number;
+  currency: string;
+  dispute_date: string;
+  case_status: 'opened' | 'under_review' | 'merchant_response' | 'resolved';
+  dispute_reason: 'fraud' | 'item_not_received' | 'quality_issue' | 'not_as_described';
+  card_network: 'visa' | 'mastercard' | 'amex' | 'discover';
+  loss_allocation: number;
+  merchant_response_evidence: string[];
+  root_cause_tags: string[];
+  merchant_win_rate?: number;
+  expected_resolution_date?: string;
+  synthetic_record_label: string;
+  edge_case_notes?: string;
+}
+
+export interface TimelineEvent {
+  case_id?: string;
+  timestamp: string;
+  event_type: 'opened' | 'response_submitted' | 'bank_review' | 'resolved';
+  description: string;
+  actor: 'merchant' | 'customer' | 'issuer' | 'acquirer';
+  synthetic_record_label?: string;
+}
+
+export interface ChargebackStats {
+  total_cases: number;
+  open_cases: number;
+  resolved_cases: number;
+  merchant_win_count: number;
+  merchant_loss_count: number;
+  avg_dispute_amount: number;
+  total_chargeback_volume: number;
+}
+
+export interface DisputeOutcomeStats {
+  favorable_to_merchant: number;
+  favorable_to_customer: number;
+  pending: number;
+  settlement: number;
+}
+
+export interface FilterState {
+  status?: string;
+  merchant?: string;
+  reason?: string;
+  network?: string;
+}
+</file>
+
+<file path="frontend/tsconfig.json">
+{
+  "compilerOptions": {
+    "ignoreDeprecations": "5.0",
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": [
+      "ES2020",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    },
+    "allowJs": true,
+    "noEmit": true,
+    "incremental": true,
+    "isolatedModules": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
+  },
+  "include": [
+    "src",
+    "next-env.d.ts",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
+</file>
+
+<file path="backend/main.py">
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+from typing import List, Optional
+from datetime import datetime
+from pathlib import Path
+import csv
+
+app = FastAPI(title="Chargeback Lifecycle Tracker API")
+
+# CORS Configuration
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# ==================== DATA MODELS ====================
+
+class ChargebackCase(BaseModel):
+    id: str
+    order_id: str
+    merchant_name: str
+    amount: float
+    currency: str
+    dispute_date: str
+    case_status: str  # opened, under_review, merchant_response, resolved
+    dispute_reason: str  # fraud, item_not_received, quality_issue, not_as_described
+    card_network: str  # visa, mastercard, amex, discover
+    loss_allocation: float  # percentage allocated to merchant
+    merchant_response_evidence: List[str]
+    root_cause_tags: List[str]
+    merchant_win_rate: Optional[float] = None
+    expected_resolution_date: Optional[str] = None
+    synthetic_record_label: str
+    edge_case_notes: Optional[str] = None
+
+
+class ChargebackStats(BaseModel):
+    total_cases: int
+    open_cases: int
+    resolved_cases: int
+    merchant_win_count: int
+    merchant_loss_count: int
+    avg_dispute_amount: float
+    total_chargeback_volume: float
+
+
+class TimelineEvent(BaseModel):
+    case_id: Optional[str] = None
+    timestamp: str
+    event_type: str  # opened, response_submitted, bank_review, resolved
+    description: str
+    actor: str  # merchant, customer, issuer, acquirer
+    synthetic_record_label: Optional[str] = None
+
+
+class DisputeOutcomeStats(BaseModel):
+    favorable_to_merchant: int
+    favorable_to_customer: int
+    pending: int
+    settlement: int
+
+
+# ==================== MOCK DATA PACKAGE LOADER ====================
+
+MOCK_DATA_DIR = Path(__file__).resolve().parent / "mock_data"
+CASES_CSV_PATH = MOCK_DATA_DIR / "chargeback_cases.csv"
+TIMELINE_EVENTS_CSV_PATH = MOCK_DATA_DIR / "timeline_events.csv"
+
+
+def _parse_list(value: str) -> List[str]:
+    if not value:
+        return []
+
+    return [
+        item.strip()
+        for item in value.split(";")
+        if item.strip()
+    ]
+
+
+def _parse_optional_float(value: str) -> Optional[float]:
+    if value == "":
+        return None
+
+    return float(value)
+
+
+def load_mock_cases() -> List[ChargebackCase]:
+    """Load synthetic chargeback cases from the mock-data CSV package."""
+    cases = []
+
+    with CASES_CSV_PATH.open(newline="", encoding="utf-8") as csv_file:
+        reader = csv.DictReader(csv_file)
+
+        for row in reader:
+            cases.append(
+                ChargebackCase(
+                    id=row["id"],
+                    order_id=row["order_id"],
+                    merchant_name=row["merchant_name"],
+                    amount=float(row["amount"]),
+                    currency=row["currency"],
+                    dispute_date=row["dispute_date"],
+                    case_status=row["case_status"],
+                    dispute_reason=row["dispute_reason"],
+                    card_network=row["card_network"],
+                    loss_allocation=float(row["loss_allocation"]),
+                    merchant_response_evidence=_parse_list(row["merchant_response_evidence"]),
+                    root_cause_tags=_parse_list(row["root_cause_tags"]),
+                    merchant_win_rate=_parse_optional_float(row["merchant_win_rate"]),
+                    expected_resolution_date=row["expected_resolution_date"] or None,
+                    synthetic_record_label=row["synthetic_record_label"],
+                    edge_case_notes=row["edge_case_notes"] or None,
+                )
+            )
+
+    return cases
+
+
+def load_mock_timeline_events(case_id: str) -> List[TimelineEvent]:
+    """Load synthetic timeline events for a chargeback case from CSV."""
+    events = []
+
+    with TIMELINE_EVENTS_CSV_PATH.open(newline="", encoding="utf-8") as csv_file:
+        reader = csv.DictReader(csv_file)
+
+        for row in reader:
+            if row["case_id"] != case_id:
+                continue
+
+            events.append(
+                TimelineEvent(
+                    case_id=row["case_id"],
+                    timestamp=row["timestamp"],
+                    event_type=row["event_type"],
+                    description=row["description"],
+                    actor=row["actor"],
+                    synthetic_record_label=row["synthetic_record_label"],
+                )
+            )
+
+    return events
+
+
+# ==================== API ENDPOINTS ====================
+
+@app.get("/")
+async def root():
+    """Health check endpoint"""
+    return {
+        "service": "Chargeback Lifecycle Tracker API",
+        "version": "1.0.0",
+        "status": "operational"
+    }
+
+
+@app.get("/api/cases", response_model=List[ChargebackCase])
+async def get_cases(
+    status: Optional[str] = None,
+    merchant: Optional[str] = None,
+    reason: Optional[str] = None,
+    network: Optional[str] = None,
+    limit: int = 50
+):
+    """
+    Retrieve chargeback cases with optional filtering.
+    
+    Query Parameters:
+    - status: Filter by case status (opened, under_review, merchant_response, resolved)
+    - merchant: Filter by merchant name (partial match)
+    - limit: Maximum number of cases to return
+    """
+    cases = load_mock_cases()
+    
+    if status:
+        cases = [c for c in cases if c.case_status == status]
+
+    if merchant:
+        cases = [c for c in cases if merchant.lower() in c.merchant_name.lower()]
+
+    if reason:
+        cases = [c for c in cases if c.dispute_reason == reason]
+
+    if network:
+        cases = [c for c in cases if c.card_network == network]
+    
+    return cases[:limit]
+
+@app.get("/api/cases/{case_id}", response_model=ChargebackCase)
+async def get_case(case_id: str):
+    """Retrieve a specific chargeback case by ID"""
+    cases = load_mock_cases()
+    case = next((c for c in cases if c.id == case_id), None)
+    
+    if not case:
+        raise HTTPException(status_code=404, detail="Case not found")
+    
+    return case
+
+
+@app.get("/api/cases/{case_id}/timeline", response_model=List[TimelineEvent])
+async def get_case_timeline(case_id: str):
+    """Retrieve timeline matching actual case status"""
+
+    cases = load_mock_cases()
+
+    case = next(
+        (c for c in cases if c.id == case_id),
+        None
+    )
+
+    if not case:
+        return []
+
+    return load_mock_timeline_events(case_id)
+
+
+@app.get("/api/stats", response_model=ChargebackStats)
+async def get_stats():
+    """Retrieve overall chargeback statistics"""
+    cases = load_mock_cases()
+    
+    open_cases = len([c for c in cases if c.case_status in ["opened", "under_review"]])
+    resolved_cases = len([c for c in cases if c.case_status == "resolved"])
+    merchant_wins = len([c for c in cases if c.case_status == "resolved" and c.merchant_win_rate is not None and c.merchant_win_rate > 50])
+    merchant_losses = resolved_cases - merchant_wins
+    
+    avg_amount = sum(c.amount for c in cases) / len(cases) if cases else 0
+    total_volume = sum(c.amount for c in cases)
+    
+    return ChargebackStats(
+        total_cases=len(cases),
+        open_cases=open_cases,
+        resolved_cases=resolved_cases,
+        merchant_win_count=merchant_wins,
+        merchant_loss_count=merchant_losses,
+        avg_dispute_amount=round(avg_amount, 2),
+        total_chargeback_volume=round(total_volume, 2)
+    )
+
+
+@app.get("/api/dispute-outcomes", response_model=DisputeOutcomeStats)
+async def get_dispute_outcomes():
+    """Retrieve dispute outcome statistics"""
+    cases = load_mock_cases()
+    
+    favorable_merchant = len([c for c in cases if c.case_status == "resolved" and c.merchant_win_rate is not None and c.merchant_win_rate > 50])
+    favorable_customer = len([c for c in cases if c.case_status == "resolved" and c.merchant_win_rate is not None and c.merchant_win_rate <= 50])
+    pending = len([c for c in cases if c.case_status in ["opened", "under_review"]])
+    settlement = len([c for c in cases if c.case_status == "merchant_response"])
+    
+    return DisputeOutcomeStats(
+        favorable_to_merchant=favorable_merchant,
+        favorable_to_customer=favorable_customer,
+        pending=pending,
+        settlement=settlement
+    )
+
+
+@app.get("/api/sample-data")
+async def download_sample_data():
+    """Provide downloadable sample chargeback data"""
+    cases = load_mock_cases()
+    
+    data = {
+        "export_date": datetime.now().isoformat(),
+        "total_records": len(cases),
+        "cases": [
+            {
+                "id": c.id,
+                "order_id": c.order_id,
+                "merchant_name": c.merchant_name,
+                "amount": c.amount,
+                "currency": c.currency,
+                "dispute_date": c.dispute_date,
+                "case_status": c.case_status,
+                "dispute_reason": c.dispute_reason,
+                "card_network": c.card_network,
+                "loss_allocation": c.loss_allocation,
+                "merchant_response_evidence": c.merchant_response_evidence,
+                "root_cause_tags": c.root_cause_tags,
+                "merchant_win_rate": c.merchant_win_rate,
+                "expected_resolution_date": c.expected_resolution_date,
+                "synthetic_record_label": c.synthetic_record_label,
+                "edge_case_notes": c.edge_case_notes,
+            }
+            for c in cases
+        ]
+    }
+    
+    return data
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
 </file>
 
 <file path="README.md">
